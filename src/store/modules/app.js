@@ -1,6 +1,7 @@
 import {otherRouter, appRouter} from '@/router/index';
 import Vue from 'vue';
 import Kit from '../../libs/kit'
+import Cookies from 'js-cookie';
 
 const app = {
   state: {
