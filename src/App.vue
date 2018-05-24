@@ -10,18 +10,21 @@
       app
     >
       <v-list>
-        <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-list-group v-model="item.active" v-for="(item, i) in menuList" :key="i" :prepend-icon="item.icon" no-action>
+          <v-list-tile slot="activator">
+            <v-list-tile-content>
+              <v-list-tile-title v-text="item.title"></v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-list-tile v-for="subItem in item.children" :key="subItem.title" @click="">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-icon>{{ subItem.icon }}</v-icon>
+              </v-list-tile-action>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -58,27 +61,30 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        clipped: true,
-        drawer: true,
-        fixed: false,
-        items: [{
-          icon: 'bubble_chart',
-          title: 'Inspire'
-        }],
-
-        items1: [
-          { title: '个人资料',icon: 'person', color: 'blue white--text', },
-          { title: '退出系统',icon: 'power_settings_new', color: 'blue white--text', },
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
-      }
-    },
-    name: 'App'
-  }
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      clipped: true,
+      drawer: true,
+      fixed: false,
+      items1: [
+        { title: "个人资料", icon: "person", color: "blue white--text" },
+        {
+          title: "退出系统",
+          icon: "power_settings_new",
+          color: "blue white--text"
+        }
+      ],
+      miniVariant: false,
+      title: "Vuetify.js"
+    };
+  },
+  computed: {
+    ...mapState({
+      menuList: state => state.app.menuList
+    })
+  },
+  name: "App"
+};
 </script>
