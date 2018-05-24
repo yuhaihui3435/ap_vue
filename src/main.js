@@ -16,7 +16,7 @@ import {
   VToolbar,
   transitions,
     VMenu,
-    VAvatar
+    VAvatar,VBreadcrumbs,VTabs
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
@@ -32,7 +32,7 @@ Vue.use(Vuetify, {
     VToolbar,
     transitions,
       VMenu,
-      VAvatar
+      VAvatar,VBreadcrumbs,VTabs
   },
   theme: {
     primary: '#ee44aa',
@@ -47,12 +47,25 @@ Vue.use(Vuetify, {
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+
+  //处理每个页面上面的面包屑 的数据
+  store.commit('setBreadcrumbsList',to)
+  //面包屑数据处理结束
+
+  next()
+});
+
+router.afterEach((to) => {
+
+});
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
-  components: { App },
-  template: '<App/>',
+  router: router,
+  store: store,
+  render: h => h(App),
   data: {
     currentPageName: ''
   },
@@ -65,3 +78,5 @@ new Vue({
 
   }
 })
+
+

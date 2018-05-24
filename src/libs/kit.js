@@ -3,7 +3,7 @@ let kit = {
 };
 
 kit.title = function (title) {
-  title = title || 'MYBANK代收付系统控制台';
+  title = title || '应用程序';
   window.document.title = title;
 };
 
