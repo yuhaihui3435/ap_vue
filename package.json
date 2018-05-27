@@ -1,7 +1,7 @@
 {
-  "name": "y",
+  "name": "ap",
   "version": "1.0.0",
-  "description": "ap project ",
+  "description": "应用程序",
   "author": "于海慧 <125227112@qq.com>",
   "private": true,
   "scripts": {
@@ -10,7 +10,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "es6-promise": "^4.2.4",
     "js-cookie": "^2.2.0",
+    "qs": "^6.5.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0",

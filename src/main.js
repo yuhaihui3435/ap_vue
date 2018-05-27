@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import {router} from './router'
 import store from './store';
+import http from './libs/http';
 import {
   Vuetify,
   VApp,
@@ -16,7 +17,7 @@ import {
   VToolbar,
   transitions,
     VMenu,
-    VAvatar
+    VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog
 } from 'vuetify'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
@@ -32,7 +33,7 @@ Vue.use(Vuetify, {
     VToolbar,
     transitions,
       VMenu,
-      VAvatar
+      VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog
   },
   theme: {
     primary: '#ee44aa',
@@ -46,14 +47,27 @@ Vue.use(Vuetify, {
 })
 
 Vue.config.productionTip = false
+Vue.prototype.$http = http;
+
+router.beforeEach((to, from, next) => {
+
+  //处理每个页面上面的面包屑 的数据
+  store.commit('setBreadcrumbsList',to)
+  //面包屑数据处理结束
+
+  next()
+});
+
+router.afterEach((to) => {
+
+});
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router: router,
   store: store,
-  components: { App },
-  template: '<App/>',
+  render: h => h(App),
   data: {
     currentPageName: ''
   },
@@ -66,3 +80,5 @@ new Vue({
 
   }
 })
+
+

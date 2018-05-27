@@ -1,9 +1,12 @@
+import store from '../store/index'
 let kit = {
-
+  msg:{
+    
+  }
 };
 
 kit.title = function (title) {
-  title = title || 'MYBANK代收付系统控制台';
+  title = title || '应用程序';
   window.document.title = title;
 };
 
@@ -24,3 +27,47 @@ kit.oneOf = function (ele, targetArr) {
     return false;
   }
 };
+
+kit.msg.ok=function(msg){
+  let data={
+    y:'top',
+    mode:'multi-line',
+    color:'success',
+    timeout:3000,
+    text:msg,
+    show:true,
+  }
+
+  store.commit('setSnackbar',data);
+
+}
+
+kit.msg.info=function(msg){
+  let data={
+    y:'top',
+    mode:'multi-line',
+    color:'info',
+    timeout:3000,
+    text:msg,
+    show:true,
+  }
+
+  store.commit('setSnackbar',data);
+
+}
+
+kit.msg.err=function(msg){
+  let data={
+    y:'top',
+    mode:'multi-line',
+    color:'error',
+    timeout:3000,
+    text:msg,
+    show:true,
+  }
+
+  store.commit('setSnackbar',data);
+
+}
+
+export default kit

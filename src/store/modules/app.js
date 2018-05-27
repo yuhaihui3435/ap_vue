@@ -25,7 +25,6 @@ const app = {
       otherRouter,
       ...appRouter
     ],
-    tagsList: [...otherRouter.children],
   },
   mutations: {
     updateMenulist (state) {

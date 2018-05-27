@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from '@/App.vue';
+import Main from '@/views/main.vue';
+
+Vue.use(Router);
 
 export const loginRouter = {
   path: '/login',
@@ -16,11 +19,13 @@ export const otherRouter = {
   path: '/',
   name: 'otherRouter',
   redirect: '/home',
-  component: App,
-  children: [{
+  component:Main,
+  children: [
+    {
       path: 'home',
-      title: '控制台',
-      name: 'home_index',
+      title: '控制中心',
+      meta:{title:'控制中心'},
+      name: 'home',
       component: resolve => {
         require(['@/views/home.vue'], resolve);
       }
@@ -28,6 +33,7 @@ export const otherRouter = {
     {
       path: 'pc',
       title: '个人中心',
+      meta:{title:'个人中心'},
       name: 'pc_index',
       component: resolve => {
         require(['@/views/personCenter.vue'], resolve);
@@ -41,50 +47,56 @@ export const appRouter = [{
   icon: 'settings',
   name: 'admin',
   title: '系统管理',
-  component: App,
+  component:Main,
+  meta:{title:'系统管理'},
   children: [{
       path: 'param',
       title: '参数管理',
+      meta:{title:'参数管理'},
       icon: "mouse",
       name: 'sm_param',
       component: resolve => {
-        require(['@/views/sys-manage/param.vue'], resolve);
+        require(['@/views/sys-manage/param/param.vue'], resolve);
       }
     },
     {
       path: 'user',
       title: '用户管理',
+      meta:{title:'用户管理'},
       icon: "person",
       name: 'sm_user',
       component: resolve => {
-        require(['@/views/sys-manage/user.vue'], resolve);
+        require(['@/views/sys-manage/user/user.vue'], resolve);
       }
     },
     {
       path: 'role',
       title: '角色管理',
+      meta:{title:'角色管理'},
       icon: "group",
       name: 'sm_role',
       component: resolve => {
-        require(['@/views/sys-manage/role.vue'], resolve);
+        require(['@/views/sys-manage/role/role.vue'], resolve);
       }
     },
     {
       path: 'res',
       title: '资源管理',
+      meta:{title:'资源管理'},
       icon: "poll",
       name: 'sm_res',
       component: resolve => {
-        require(['@/views/sys-manage/res.vue'], resolve);
+        require(['@/views/sys-manage/res/res.vue'], resolve);
       }
     },
     {
       path: 'dd',
       title: '数据字典',
+      meta:{title:'数据字典'},
       icon: "local_library",
       name: 'sm_dd',
       component: resolve => {
-        require(['@/views/sys-manage/dd.vue'], resolve);
+        require(['@/views/sys-manage/dd/dd.vue'], resolve);
       }
     },
   ]
@@ -96,9 +108,6 @@ export const routers = [
   ...appRouter,
 ];
 
-
-Vue.use(Router);
-
 // 路由配置
 const RouterConfig = {
   // mode: 'history',
@@ -107,11 +116,3 @@ const RouterConfig = {
 
 export const router = new Router(RouterConfig);
 
-router.beforeEach((to, from, next) => {
-  console.info(to.name);
-
-});
-
-router.afterEach((to) => {
-
-});
