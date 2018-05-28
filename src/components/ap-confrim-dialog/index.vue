@@ -5,8 +5,8 @@
         <v-card-text>{{msg}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn v-for="(item,index) in btns" :key="index" :color="item.color" flat="flat" @click.native="item.action">{{item.label}}</v-btn>
-          
+          <v-btn color="error darken-1" flat="flat" @click.native="actions[0]">取消</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="actions[1]">确认</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -18,7 +18,7 @@ export default {
             dialog:false,
             title:'提示',
             msg:'确认要执行这个操作吗？',
-            btns:[],
+            actions:[],
         }
     },
     methods:{
