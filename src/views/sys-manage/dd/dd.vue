@@ -162,12 +162,13 @@ export default {
         .dispatch("save_dd")
         .then((res) => {
           this.loading = false;
-          this.dialog=false;
+          
           if(res.resCode=='success'){
-            if(pName==''){
+            this.dialog=false;
+            if(vm.pName==''){
               vm.$store.dispatch('query_dd_json');
             }else{
-              vm.$store.dispatch('get_dd_children',vm.selectId)
+              vm.$store.dispatch('get_dd_children',{id:vm.selectId})
             }
           }
           
@@ -196,14 +197,27 @@ export default {
       // dd.children.forEach(function(item, index, array) {
       //   this.ddChildren.push(item);
       // });
+      if(dd.name!=undefined)
       this.ddListTitle='字典【'+dd.name+'】数据列表'
       this.$store.dispatch('get_dd_children',{id:dd.id})
+      this.selectId=dd.id;
     },
     toEdit(dd){
 
     },
     del(dd){
-
+      let vm=this;
+      this.$APDialog.confirm(function(ret){
+            if(ret){
+              vm.$store.dispatch('del_dd',{id:dd.id}).then(res=>{
+                if(res.resCode=='success'){
+                   vm.getChildren({id:vm.selectId}) 
+                }
+              })
+            }else{
+              
+            }
+      })
     }
   }
 };

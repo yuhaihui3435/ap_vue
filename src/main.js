@@ -19,6 +19,7 @@ import {
     VMenu,
     VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog
 } from 'vuetify'
+import APDialog from './components/ap-confrim-dialog/index'
 import '../node_modules/vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
@@ -45,7 +46,7 @@ Vue.use(Vuetify, {
     warning: '#FFC107'
   }
 })
-
+Vue.use(APDialog)
 Vue.config.productionTip = false
 Vue.prototype.$http = http;
 
