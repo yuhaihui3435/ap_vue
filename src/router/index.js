@@ -100,7 +100,25 @@ export const appRouter = [{
       }
     },
   ]
-}];
+},
+{path: '/genCode',
+  icon: 'code',
+  name: 'gen',
+  title: '代码管理',
+  component:Main,
+  meta:{title:'代码管理'},
+  children: [{
+    path: 'gen',
+    title: '代码生成',
+    meta:{title:'代码生成'},
+    icon: "build",
+    name: 'gen_main',
+    component: resolve => {
+      require(['@/views/sys-manage/gen/gen.vue'], resolve);
+    }
+  }]
+}
+];
 
 export const routers = [
   loginRouter,

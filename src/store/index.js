@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import app from './modules/app';
 import param from './modules/param';
 import dd from './modules/dd';
+import gen from './modules/gen';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -55,7 +56,8 @@ const store = new Vuex.Store({
   modules: {
     app,
     param,
-    dd
+    dd,
+    gen,
   }
 });
 
