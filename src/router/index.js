@@ -108,15 +108,25 @@ export const appRouter = [{
   component:Main,
   meta:{title:'代码管理'},
   children: [{
-    path: 'gen',
-    title: '代码生成',
-    meta:{title:'代码生成'},
-    icon: "build",
-    name: 'gen_main',
+    path: 'genSource',
+    title: '数据源',
+    meta:{title:'数据源'},
+    icon: "fas fa-database",
+    name: 'gen_source',
     component: resolve => {
-      require(['@/views/sys-manage/gen/gen.vue'], resolve);
+      require(['@/views/sys-manage/gen/genSource.vue'], resolve);
     }
-  }]
+  },{
+    path: 'genCfg',
+    title: '代码生成配置',
+    meta:{title:'代码生成配置'},
+    icon: "fab fa-java",
+    name: 'gen_cfg',
+    component: resolve => {
+      require(['@/views/sys-manage/gen/genCfg.vue'], resolve);
+    }
+  },
+  ]
 }
 ];
 
