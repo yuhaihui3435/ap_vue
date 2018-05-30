@@ -10,7 +10,7 @@
             <v-form v-model="fValid" ref="form" lazy-validation>
                 <v-container grid-list-md>
                   <v-layout wrap>
-                      <v-flex xs12 sm6 md4>
+                      <v-flex xs12 sm6 md4>   
                         <v-text-field v-model="dd.dict"  label="字典名"  :disabled="pName!=''||opt=='update'" :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>

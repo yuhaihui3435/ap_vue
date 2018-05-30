@@ -197,7 +197,8 @@ export default {
 
   methods: {
     refresh() {
-      this.$store.dispatch("query_tableMetas_json");
+      let gsId=this.$route.query.gsId;
+      this.$store.dispatch("query_tableMetas_json",{gsId:gsId});
     },
     getColumnMetas(tableMeta) {
       this.columnMetasTitle = "【" + tableMeta.name + "】表中的列数据";

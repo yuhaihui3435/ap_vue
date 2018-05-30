@@ -36,7 +36,7 @@ const Confirm = function (callback, message) {
 const Alert = function (callback, message) {
   let config = {
     msg: message,
-    actions: [{label:'确认',action:function () {
+    btns: [{label:'确认',action:function () {
       Dismiss();
       callback && callback();
     },color:'success darken-1'}]

@@ -28,7 +28,7 @@ const gen = {
       commit,
       state
     }, param) {
-      this._vm.$http.get('/api/gen/list_table').then((res) => {
+      this._vm.$http.post('/api/gen/list_table',param).then((res) => {
         commit('setTableMetasList', res)
       });
     },
@@ -55,7 +55,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.get('/api/genSource/save', param).then((res) => {
+        vm.$http.post('/api/genSource/save', state.genSource).then((res) => {
           resolve(res)
         });
       })
@@ -66,7 +66,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.get('/api/genSource/update', param).then((res) => {
+        vm.$http.post('/api/genSource/update', state.genSource).then((res) => {
           resolve(res)
         });
       })
@@ -77,7 +77,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.get('/api/genSource/del', param).then((res) => {
+        vm.$http.post('/api/genSource/del', param).then((res) => {
           resolve(res)
         });
       })

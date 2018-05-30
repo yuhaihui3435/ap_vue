@@ -15,6 +15,10 @@ export const loginRouter = {
     require(['@/views/login.vue'], resolve);
   }
 };
+
+
+
+
 export const otherRouter = {
   path: '/',
   name: 'otherRouter',
@@ -39,6 +43,17 @@ export const otherRouter = {
         require(['@/views/personCenter.vue'], resolve);
       }
     },
+    {
+      path: 'genCfg',
+      title: '代码生成配置',
+      meta:{title:'代码生成配置'},
+      icon: "fab fa-java",
+      name: 'gen_cfg',
+      component: resolve => {
+        require(['@/views/sys-manage/gen/genCfg.vue'], resolve);
+      }
+    },
+
   ]
 };
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
@@ -116,16 +131,8 @@ export const appRouter = [{
     component: resolve => {
       require(['@/views/sys-manage/gen/genSource.vue'], resolve);
     }
-  },{
-    path: 'genCfg',
-    title: '代码生成配置',
-    meta:{title:'代码生成配置'},
-    icon: "fab fa-java",
-    name: 'gen_cfg',
-    component: resolve => {
-      require(['@/views/sys-manage/gen/genCfg.vue'], resolve);
-    }
   },
+  
   ]
 }
 ];
