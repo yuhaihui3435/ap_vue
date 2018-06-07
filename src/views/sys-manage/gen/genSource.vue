@@ -81,6 +81,9 @@
               <v-btn icon class="mx-0" @click="toEdit(props.item)">
                 <v-icon color="teal">edit</v-icon>
               </v-btn>
+              <v-btn icon class="mx-0" @click="sync(props.item)">
+                <v-icon color="teal">sync</v-icon>
+              </v-btn>
               <v-btn icon class="mx-0" @click="goSetting(props.item)">
                 <v-icon color="teal">settings</v-icon>
               </v-btn>
@@ -99,6 +102,7 @@
 <script>
 import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
+
 export default {
   data() {
     return {
@@ -211,6 +215,9 @@ export default {
     },
     goSetting(genSource){
         this.$router.push({path:'/genCfg',query:{gsId:genSource.id}})
+    },
+    sync(genSource){
+      this.$store.dispatch('sync_genSource',{gsId:genSource.id})
     }
   }
 };

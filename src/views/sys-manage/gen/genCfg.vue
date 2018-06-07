@@ -9,48 +9,69 @@
             <v-form v-model="fValid" ref="form" lazy-validation>
                 <v-container grid-list-md>
                   <v-layout wrap>
-                      <v-flex xs12 sm6 md4>
+                      <v-flex xs12 sm12 md12>
                         <v-switch :label="`列表显示`" v-model="config.tableShow"></v-switch>
                       </v-flex>
+                      
+                      
                       <v-flex xs12 sm6 md4>
                         <v-switch :label="`新增显示`" v-model="config.addShow"></v-switch>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-switch :label="'新增不可用'" v-model="config.addDisabled"></v-switch>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-switch :label="'新增只读'" v-model="config.addReadonly"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
                         <v-switch :label="'修改显示'" v-model="config.editShow"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
+                        <v-switch :label="'修改不可用'" v-model="config.editDisabled"></v-switch>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-switch :label="'修改只读'" v-model="config.editReadonly"></v-switch>
+                      </v-flex>
+                      
+                      
+                      
+                      
+
+
+
+                      <v-flex xs12 sm6 md4>
+                        <v-select :items="inputTypeList" v-model="config.inputType" label="类型" single-line ></v-select>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="config.min"  label="最小长度"   v-show="config.inputType=='text'||config.inputType=='textArea'"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="config.max"  label="最大长度"    v-show="config.inputType=='text'||config.inputType=='textArea'"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
                         <v-switch :label="'必填'" v-model="config.isRequired"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'不可用'" v-model="config.disabled"></v-switch>
+                        <v-switch :label="'唯一'" v-model="config.onlyOne" v-show="config.inputType=='text'||config.inputType=='textArea'"></v-switch>
+                      </v-flex>
+                       <v-flex xs12 sm6 md4>
+                        <v-switch :label="'是否EMAIL'" v-show="config.inputType=='text'" v-model="config.isEmail"></v-switch>
+                      </v-flex>
+                       <v-flex xs12 sm6 md4>
+                        <v-switch :label="'是否手机号'" v-show="config.inputType=='text'" v-model="config.isPhone"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'只读'" v-model="config.readonly"></v-switch>
+                        <v-switch :label="'数字'" v-show="config.inputType=='text'" v-model="config.isNum"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-select :items="config.inputTypeList" v-model="config.inputType" label="类型" single-line ></v-select>
+                       <v-flex xs12 sm6 md4>
+                        <v-switch :label="'字母'" v-show="config.inputType=='text'" v-model="config.isChart"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="config.min"  label="最小长度"   ></v-text-field>
+                       <v-flex xs12 sm6 md4>
+                        <v-switch :label="'汉字'" v-show="config.inputType=='text'" v-model="config.isChinese"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="config.max"  label="最大长度"   ></v-text-field>
+                      <v-flex xs12 sm12 md12>
+                        <v-text-field :label="'正则表达式'" v-show="config.inputType=='text'" v-model="config.reg"></v-text-field>
                       </v-flex>
-                      
-                      
-                      
-                      <!-- <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="pName"  label="上级名字"   disabled></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="dd.name"  label="名字"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="dd.val"  label="值"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="dd.idx"  label="序号"  :rules="[rules.digital]"></v-text-field>
-                      </v-flex> -->
                   </v-layout>
                 </v-container>
             </v-form>
@@ -63,6 +84,12 @@
       </v-card>
       </v-dialog>
     <v-layout row wrap>
+      <v-flex xs12 sm12 md12>
+        <v-btn  @click="returnPre()" class="primary">
+            <v-icon>keyboard_return</v-icon>返回
+        </v-btn>
+      </v-flex>
+        
         <v-flex xs12 sm4 md4 >
             <v-card >
                 <v-toolbar color="blue" dark>
@@ -82,13 +109,23 @@
                     <v-data-table :headers="headers" :items="tableMetasList" hide-actions class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据" :search="search">
                     <template slot="items" slot-scope="props">
                         <!-- <td >{{ props.item.pName }}</td> -->
-                        <td >{{ props.item.name }}</td>
-                        <td >{{ props.item.primaryKey }}</td>
+                        <td >{{ props.item.tbl }}</td>
+                        <!-- <td >{{ props.item.primaryKey }}</td> -->
                         <!-- <td >{{ props.item.remarks }}</td> -->
                         <td class=" layout px-0">
                         <v-btn icon class="mx-0" @click="getColumnMetas(props.item)">
-                            <v-icon color="teal">visibility</v-icon>
+                            <v-icon color="teal">fas fa-eye</v-icon>
                         </v-btn>
+                        <v-btn icon class="mx-0" @click="createJava(props.item)">
+                            <v-icon color="teal">fab fa-java</v-icon>
+                        </v-btn>
+                        <v-btn icon class="mx-0" @click="createJs(props.item)">
+                            <v-icon color="teal">fab fa-js</v-icon>
+                        </v-btn>
+                        <v-btn icon class="mx-0" @click="createAll(props.item)">
+                            <v-icon color="teal">done_all</v-icon>
+                        </v-btn>
+                        
                         </td>
                     </template>
                 </v-data-table>
@@ -110,18 +147,24 @@
                     <v-data-table :headers="headers_column" :items="columnMetasList" hide-actions class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据" :search="search_column">
                     <template slot="items" slot-scope="props">
                         <!-- <td >{{ props.item.pName }}</td> -->
-                        <td >{{ props.item.name }}</td>
+                        <td >{{ props.item.col }}</td>
                         <!-- <td >{{ props.item.type }}</td> -->
                         <!-- <td >{{ props.item.attrName }}</td> -->
-                        <td >{{ props.item.javaType }}</td>
-                        <td >{{ props.item.config }}</td>
+                        <td >{{ props.item.tpe }}</td>
+                        <!-- <td >{{ props.item.txt }}</td> -->
                         <!-- <td >{{ props.item.isNullable }}</td> -->
                         <!-- <td >{{ props.item.defaultValue }}</td> -->
                         <!-- <td >{{ props.item.remarks }}</td> -->
                         <td class=" layout px-0">
-                        <v-btn icon class="mx-0" @click="toEdit(props.item.name)">
-                            <v-icon color="teal">edit</v-icon>
+                        <v-btn icon class="mx-0" @click="toEdit(props.item)">
+                            <v-icon :color="(props.item.txt&&props.item.txt!='')?'purple':'teal'">edit</v-icon>
                         </v-btn>
+                        <!-- <v-tooltip left>
+                        <v-btn slot="activator" icon class="mx-0" >
+                            <v-icon color="teal">fas fa-eye</v-icon>
+                        </v-btn>
+                        <div>{{props.item.txt}}</div>
+                        </v-tooltip> -->
                         </td>
                     </template>
                 </v-data-table>
@@ -138,15 +181,24 @@ const defaultConfig={
       tableShow: false,
       addShow:false,
       editShow:false,
-      disabled:false,
-      readonly:false,
+      addDisabled:false,
+      addReadonly:false,
+      editDisabled:false,
+      editReadonly:false,
+      onlyOne:false,
+      isEmail:false,
+      isPhone:false,
       min:'',
       max:'',
       isRequired:false,
       inputType:'text',
-      inputTypeList:[
-          'text','select','radio','checkbox','textArea','date','dateTime','slider'
-      ],
+      reg:'',
+      isNum:false,
+      isChart:false,
+      isChinese:false,
+      
+
+      
 }
 
 export default {
@@ -161,27 +213,30 @@ export default {
       dialog: false,
       config:defaultConfig,
       loading:false,
+      tbl:{},
+      col:{},
       headers: [
         {
           text: "表名称",
           align: "left",
-          value: "name"
+          value: "tbl"
         },
-        { text: "主键", value: "primaryKey" },
-        // { text: "备注", value: "remarks" },
-        { text: "操作", value: "name", sortable: false }
+        { text: "操作",  sortable: false }
       ],
       headers_column: [
         {
           text: "列名称",
           align: "left",
-          value: "name"
+          value: "col"
         },
-        { text: "类型", value: "javaType" },
-        { text: "配置", value: "config" },
-        { text: "操作", value: "name", sortable: false }
+        { text: "类型", value: "tpe" },
+        // { text: "配置", value: "txt" },
+        { text: "操作", sortable: false }
       ],
-      columnMetasList: []
+      columnMetasList: [],
+      inputTypeList:[
+          'text','select','radio','checkbox','switch','textArea','date','dateTime','slider','pic','file','excel'
+      ],
     };
   },
   computed: {
@@ -201,12 +256,32 @@ export default {
       this.$store.dispatch("query_tableMetas_json",{gsId:gsId});
     },
     getColumnMetas(tableMeta) {
-      this.columnMetasTitle = "【" + tableMeta.name + "】表中的列数据";
-      this.columnMetasList = tableMeta.columnMetas;
+      this.tbl=tableMeta;
+      this.columnMetasTitle = "【" + tableMeta.tbl + "】表中的列数据";
+      this.columnMetasList = tableMeta.genCfgColList;
     },
-    toEdit(columnName) {
-      this.dialogTitle = "设置【" + columnName + "】列的配置";
+    toEdit(col) {
+      this.dialogTitle = "设置【" + col.col + "】列的配置";
       this.dialog = true;
+      this.loading=false;
+      this.col=col;
+      if(col.txt&&col.txt!=''){
+        this.config=JSON.parse(col.txt)
+        
+      }else{
+        this.config=Object.assign({},defaultConfig);
+      }
+    },
+    save(){
+      this.col.txt=JSON.stringify(this.config);
+      this.$store.dispatch('save_colConfig',this.col).then(res=>{
+          this.dialog=false;
+          this.col=Object.assign({},{});
+      })
+
+    },
+    returnPre(){
+      this.$router.back(-1);
     }
   }
 };

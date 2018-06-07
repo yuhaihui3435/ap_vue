@@ -87,10 +87,30 @@ const gen = {
       state
     }, param) {
       let vm = this._vm;
-      vm.$http.get('/api/genSource/get', param).then((res) => {
+      vm.$http.post('/api/genSource/get', param).then((res) => {
         commit('setGenSource',res)
       });
     },
+    sync_genSource:function({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      vm.$http.post('/api/gen/syncLocal', param).then((res) => {
+       
+      });
+    },
+    save_colConfig:function({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/gen/saveColConfig', param).then((res) => {
+          resolve(res)
+        });
+      })
+    }
   },
 
 }
