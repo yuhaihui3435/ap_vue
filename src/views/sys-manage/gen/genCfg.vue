@@ -9,8 +9,14 @@
             <v-form v-model="fValid" ref="form" lazy-validation>
                 <v-container grid-list-md>
                   <v-layout wrap>
-                      <v-flex xs12 sm12 md12>
+                      <v-flex xs12 sm6 md4>
                         <v-switch :label="`列表显示`" v-model="config.tableShow"></v-switch>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-switch :label="` = 查询`" v-if="!config.likeQuery" v-model="config.equalQuery"></v-switch>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4>
+                        <v-switch :label="` LIKE 查询`" v-if="!config.equalQuery" v-model="config.likeQuery"></v-switch>
                       </v-flex>
                       
                       
@@ -196,8 +202,8 @@ const defaultConfig={
       isNum:false,
       isChart:false,
       isChinese:false,
-      
-
+      equalQuery:false,
+      likeQuery:false,
       
 }
 
@@ -259,6 +265,27 @@ export default {
       this.tbl=tableMeta;
       this.columnMetasTitle = "【" + tableMeta.tbl + "】表中的列数据";
       this.columnMetasList = tableMeta.genCfgColList;
+    },
+    createJava(item){
+      let param={tblId:item.id,action:'java'}
+      let vm=this;
+
+      this.$APDialog.confirm(function(ret){
+        if (ret) {
+          vm.$store.dispatch('gen_code',param).then(res=>{
+
+          })
+        }else{
+
+        }
+      })
+      
+    },
+    createJs(item){
+
+    },
+    createAll(item){
+
     },
     toEdit(col) {
       this.dialogTitle = "设置【" + col.col + "】列的配置";

@@ -110,6 +110,17 @@ const gen = {
           resolve(res)
         });
       })
+    },
+    gen_code:function({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/gen/genCode', param).then((res) => {
+          resolve(res)
+        });
+      })
     }
   },
 

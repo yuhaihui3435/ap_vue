@@ -29,11 +29,14 @@
                           <v-select :items="dialectList" v-model="genSource.dialect" label="数据源方言" single-line></v-select>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
+                        <v-text-field v-model="genSource.basePackage"  label="基础包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
+                      </v-flex>
+                      <!-- <v-flex xs12 sm6 md4>
                         <v-text-field v-model="genSource.baseModelPackageName"  label="数据模型基础包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
                         <v-text-field v-model="genSource.modelPackageName"  label="数据模型包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
-                      </v-flex>
+                      </v-flex> -->
                       <v-flex xs12 sm6 md4>
                         <v-text-field v-model="genSource.removePrefix"  label="移除前缀（|分割）"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex>
@@ -73,8 +76,9 @@
             <td >{{ props.item.user }}</td>
             <td >{{ props.item.pwd }}</td>
             <td >{{ props.item.dialect }}</td>
-            <td >{{ props.item.baseModelPackageName }}</td>
-            <td >{{ props.item.modelPackageName }}</td>
+            <td >{{ props.item.basePackage }}</td>
+            <!-- <td >{{ props.item.baseModelPackageName }}</td> -->
+            <!-- <td >{{ props.item.modelPackageName }}</td> -->
             <td >{{ props.item.removePrefix }}</td>
             <td >{{ props.item.excludedTable }}</td>
             <td class=" layout px-0">
@@ -119,8 +123,9 @@ export default {
         { text: "数据源用户", value: "user" },
         { text: "数据源密码", value: "pwd" },
         { text: "数据源方言", value: "dialect" },
-        { text: "数据模型基础包名", value: "baseModelPackageName" },
-        { text: "数据模型包名", value: "modelPackageName" },
+        { text: "基础包名", value: "basePackage" },
+        // { text: "数据模型基础包名", value: "baseModelPackageName" },
+        // { text: "数据模型包名", value: "modelPackageName" },
         { text: "移除前缀", value: "removePrefix" },
         { text: "排除表名", value: "excludedTable" },
         { text: "操作", value: "name", sortable: false }
