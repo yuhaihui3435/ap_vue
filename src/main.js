@@ -17,7 +17,7 @@ import {
   VToolbar,
   transitions,
     VMenu,
-    VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker
+    VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker,Vpagination
 } from 'vuetify'
 import APDialog from './components/ap-confrim-dialog/index'
 import '../node_modules/vuetify/src/stylus/app.styl'
@@ -34,7 +34,7 @@ Vue.use(Vuetify, {
     VToolbar,
     transitions,
       VMenu,
-      VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker
+      VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker,Vpagination
   },
   theme: {
     primary: '#ee44aa',

@@ -240,9 +240,6 @@ export default {
         "date",
         "time",
         "slider",
-        "pic",
-        "file",
-        "excel"
       ]
     };
   },
