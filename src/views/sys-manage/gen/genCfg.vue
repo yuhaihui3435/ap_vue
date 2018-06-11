@@ -238,7 +238,7 @@ export default {
         "switch",
         "textArea",
         "date",
-        "dateTime",
+        "time",
         "slider",
         "pic",
         "file",
