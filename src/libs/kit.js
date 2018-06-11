@@ -4,15 +4,25 @@ let kit = {
 
   },
   inputRules: {
-    required: (value) => !!value || '必填',
-    email: (value) => {
+    required: (val) => !!val || '必填',
+    email: (val) => {
       const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return pattern.test(value) || 'e-mail格式错误'
+      return pattern.test(val) || 'e-mail格式错误'
     },
     digital:(val)=>{
       const pattern=/^[0-9]*$/
       return (!!!val||pattern.test(val)) || '必须是数字' 
-    }
+    },
+    chart:(val)=>{
+
+    },
+    chinese:(val)=>{
+
+    },
+    phone:(val)=>{
+
+    },
+
   }
 };
 

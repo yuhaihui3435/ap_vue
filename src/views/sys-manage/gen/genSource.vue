@@ -85,7 +85,7 @@
               <v-btn icon class="mx-0" @click="toEdit(props.item)">
                 <v-icon color="teal">edit</v-icon>
               </v-btn>
-              <v-btn icon class="mx-0" @click="sync(props.item)">
+              <v-btn icon class="mx-0" @click="sync(props.item)" :disabled="syncDisable">
                 <v-icon color="teal">sync</v-icon>
               </v-btn>
               <v-btn icon class="mx-0" @click="goSetting(props.item)">
@@ -113,6 +113,7 @@ export default {
       fValid: true,
       valid: true,
       loading: false,
+      syncDisable:false,
       dialogTitle: "新增数据源",
       genSourceListTitle: "数据源列表",
       rules: Kit.inputRules,
@@ -222,7 +223,16 @@ export default {
         this.$router.push({path:'/genCfg',query:{gsId:genSource.id}})
     },
     sync(genSource){
-      this.$store.dispatch('sync_genSource',{gsId:genSource.id})
+      let vm=this;
+      this.$APDialog.confirm(function(ret){
+        if(ret){
+          vm.syncDisable=true;
+          vm.$store.dispatch('sync_genSource',{gsId:genSource.id}).then(res=>{
+            vm.syncDisable=false;
+          })
+        }
+      })
+      
     }
   }
 };

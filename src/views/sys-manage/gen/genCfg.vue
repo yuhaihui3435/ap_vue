@@ -9,42 +9,27 @@
             <v-form v-model="fValid" ref="form" lazy-validation>
                 <v-container grid-list-md>
                   <v-layout wrap>
-                      <v-flex xs12 sm6 md4>
+                      <v-flex xs12 sm12 md12>
                         <v-switch :label="`列表显示`" v-model="config.tableShow"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="` = 查询`" v-if="!config.likeQuery" v-model="config.equalQuery"></v-switch>
+                        <v-switch :label="` = 查询`" v-show="!config.likeQuery&&!(config.inputType=='date'||config.inputType=='dateTime')" v-model="config.equalQuery"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="` LIKE 查询`" v-if="!config.equalQuery" v-model="config.likeQuery"></v-switch>
+                        <v-switch :label="` LIKE 查询`" v-show="!config.equalQuery&&!(config.inputType=='date'||config.inputType=='dateTime')" v-model="config.likeQuery"></v-switch>
                       </v-flex>
-                      
-                      
+                      <v-flex xs12 sm6 md4>
+                        <v-switch :label="` 日期查询`" v-show="config.inputType=='date'||config.inputType=='dateTime'" v-model="config.dateQuery"></v-switch>
+                      </v-flex>
                       <v-flex xs12 sm6 md4>
                         <v-switch :label="`新增显示`" v-model="config.addShow"></v-switch>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="'新增不可用'" v-model="config.addDisabled"></v-switch>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="'新增只读'" v-model="config.addReadonly"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
                         <v-switch :label="'修改显示'" v-model="config.editShow"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'修改不可用'" v-model="config.editDisabled"></v-switch>
+                        <v-switch :label="'详细显示'" v-model="config.viewShow"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="'修改只读'" v-model="config.editReadonly"></v-switch>
-                      </v-flex>
-                      
-                      
-                      
-                      
-
-
-
                       <v-flex xs12 sm6 md4>
                         <v-select :items="inputTypeList" v-model="config.inputType" label="类型" single-line ></v-select>
                       </v-flex>
@@ -77,6 +62,9 @@
                       </v-flex>
                       <v-flex xs12 sm12 md12>
                         <v-text-field :label="'正则表达式'" v-show="config.inputType=='text'" v-model="config.reg"></v-text-field>
+                      </v-flex>
+                      <v-flex xs12 sm12 md12>
+                        <v-text-field :label="'是否排序'"  v-model="config.isSort"></v-text-field>
                       </v-flex>
                   </v-layout>
                 </v-container>
@@ -117,7 +105,7 @@
                         <!-- <td >{{ props.item.pName }}</td> -->
                         <td >{{ props.item.tbl }}</td>
                         <!-- <td >{{ props.item.primaryKey }}</td> -->
-                        <!-- <td >{{ props.item.remarks }}</td> -->
+                        <td >{{ props.item.note }}</td>
                         <td class=" layout px-0">
                         <v-btn icon class="mx-0" @click="getColumnMetas(props.item)">
                             <v-icon color="teal">fas fa-eye</v-icon>
@@ -152,13 +140,13 @@
                 </v-toolbar>
                     <v-data-table :headers="headers_column" :items="columnMetasList" hide-actions class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据" :search="search_column">
                     <template slot="items" slot-scope="props">
-                        <!-- <td >{{ props.item.pName }}</td> -->
+                        <td >{{ props.item.orgCol }}</td>
                         <td >{{ props.item.col }}</td>
                         <!-- <td >{{ props.item.type }}</td> -->
                         <!-- <td >{{ props.item.attrName }}</td> -->
                         <td >{{ props.item.tpe }}</td>
                         <!-- <td >{{ props.item.txt }}</td> -->
-                        <!-- <td >{{ props.item.isNullable }}</td> -->
+                        <td >{{ props.item.note }}</td>
                         <!-- <td >{{ props.item.defaultValue }}</td> -->
                         <!-- <td >{{ props.item.remarks }}</td> -->
                         <td class=" layout px-0">
@@ -183,29 +171,29 @@
 import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
 
-const defaultConfig={
-      tableShow: false,
-      addShow:false,
-      editShow:false,
-      addDisabled:false,
-      addReadonly:false,
-      editDisabled:false,
-      editReadonly:false,
-      onlyOne:false,
-      isEmail:false,
-      isPhone:false,
-      min:'',
-      max:'',
-      isRequired:false,
-      inputType:'text',
-      reg:'',
-      isNum:false,
-      isChart:false,
-      isChinese:false,
-      equalQuery:false,
-      likeQuery:false,
-      
-}
+const defaultConfig = {
+  tableShow: false,
+  addShow: false,
+  editShow: false,
+  addDisabled: false,
+  addReadonly: false,
+  editDisabled: false,
+  editReadonly: false,
+  onlyOne: false,
+  isEmail: false,
+  isPhone: false,
+  min: "",
+  max: "",
+  isRequired: false,
+  inputType: "text",
+  reg: "",
+  isNum: false,
+  isChart: false,
+  isChinese: false,
+  equalQuery: false,
+  likeQuery: false,
+  dateQuery: false
+};
 
 export default {
   data() {
@@ -214,35 +202,48 @@ export default {
       columnMetasTitle: "列表",
       search: "",
       search_column: "",
-      fValid:true,
+      fValid: true,
       dialogTitle: "",
       dialog: false,
-      config:defaultConfig,
-      loading:false,
-      tbl:{},
-      col:{},
+      config: defaultConfig,
+      loading: false,
+      tbl: {},
+      col: {},
       headers: [
         {
           text: "表名称",
           align: "left",
           value: "tbl"
         },
-        { text: "操作",  sortable: false }
+        { text: "注释", value: "note" },
+        { text: "操作", sortable: false }
       ],
       headers_column: [
         {
           text: "列名称",
           align: "left",
-          value: "col"
+          value: "orgCol"
         },
+        { text: "属性名", value: "col" },
         { text: "类型", value: "tpe" },
-        // { text: "配置", value: "txt" },
+        { text: "注释", value: "note" },
         { text: "操作", sortable: false }
       ],
       columnMetasList: [],
-      inputTypeList:[
-          'text','select','radio','checkbox','switch','textArea','date','dateTime','slider','pic','file','excel'
-      ],
+      inputTypeList: [
+        "text",
+        "select",
+        "radio",
+        "checkbox",
+        "switch",
+        "textArea",
+        "date",
+        "dateTime",
+        "slider",
+        "pic",
+        "file",
+        "excel"
+      ]
     };
   },
   computed: {
@@ -258,56 +259,56 @@ export default {
 
   methods: {
     refresh() {
-      let gsId=this.$route.query.gsId;
-      this.$store.dispatch("query_tableMetas_json",{gsId:gsId});
+      let gsId = this.$route.query.gsId;
+      this.$store.dispatch("query_tableMetas_json", { gsId: gsId });
     },
     getColumnMetas(tableMeta) {
-      this.tbl=tableMeta;
+      this.tbl = tableMeta;
       this.columnMetasTitle = "【" + tableMeta.tbl + "】表中的列数据";
       this.columnMetasList = tableMeta.genCfgColList;
     },
-    createJava(item){
-      let param={tblId:item.id,action:'java'}
-      let vm=this;
+    createJava(item) {
+      let param = { tblId: item.id, action: "java" };
+      let vm = this;
 
-      this.$APDialog.confirm(function(ret){
+      this.$APDialog.confirm(function(ret) {
         if (ret) {
-          vm.$store.dispatch('gen_code',param).then(res=>{
-
-          })
-        }else{
-
+          vm.$store.dispatch("gen_code", param).then(res => {});
+        } else {
         }
-      })
-      
+      });
     },
-    createJs(item){
+    createJs(item) {
+      let param = { tblId: item.id, action: "js" };
+      let vm = this;
 
+      this.$APDialog.confirm(function(ret) {
+        if (ret) {
+          vm.$store.dispatch("gen_code", param).then(res => {});
+        } else {
+        }
+      });
     },
-    createAll(item){
-
-    },
+    createAll(item) {},
     toEdit(col) {
       this.dialogTitle = "设置【" + col.col + "】列的配置";
       this.dialog = true;
-      this.loading=false;
-      this.col=col;
-      if(col.txt&&col.txt!=''){
-        this.config=JSON.parse(col.txt)
-        
-      }else{
-        this.config=Object.assign({},defaultConfig);
+      this.loading = false;
+      this.col = col;
+      if (col.txt && col.txt != "") {
+        this.config = JSON.parse(col.txt);
+      } else {
+        this.config = Object.assign({}, defaultConfig);
       }
     },
-    save(){
-      this.col.txt=JSON.stringify(this.config);
-      this.$store.dispatch('save_colConfig',this.col).then(res=>{
-          this.dialog=false;
-          this.col=Object.assign({},{});
-      })
-
+    save() {
+      this.col.txt = JSON.stringify(this.config);
+      this.$store.dispatch("save_colConfig", this.col).then(res => {
+        this.dialog = false;
+        this.col = Object.assign({}, {});
+      });
     },
-    returnPre(){
+    returnPre() {
       this.$router.back(-1);
     }
   }

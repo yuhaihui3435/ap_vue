@@ -28,7 +28,7 @@ const gen = {
       commit,
       state
     }, param) {
-      this._vm.$http.post('/api/gen/list_table',param).then((res) => {
+      this._vm.$http.post('/api/gen/list_table', param).then((res) => {
         commit('setTableMetasList', res)
       });
     },
@@ -88,19 +88,21 @@ const gen = {
     }, param) {
       let vm = this._vm;
       vm.$http.post('/api/genSource/get', param).then((res) => {
-        commit('setGenSource',res)
+        commit('setGenSource', res)
       });
     },
-    sync_genSource:function({
+    sync_genSource: function ({
       commit,
       state
     }, param) {
       let vm = this._vm;
-      vm.$http.post('/api/gen/syncLocal', param).then((res) => {
-       
-      });
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/gen/syncLocal', param).then((res) => {
+            resolve(res)
+        });
+      })
     },
-    save_colConfig:function({
+    save_colConfig: function ({
       commit,
       state
     }, param) {
@@ -111,7 +113,7 @@ const gen = {
         });
       })
     },
-    gen_code:function({
+    gen_code: function ({
       commit,
       state
     }, param) {
