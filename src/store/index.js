@@ -4,6 +4,7 @@ import app from './modules/app';
 import param from './modules/param';
 import dd from './modules/dd';
 import gen from './modules/gen';
+import user from './modules/user';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -58,6 +59,7 @@ const store = new Vuex.Store({
     param,
     dd,
     gen,
+    user,
   }
 });
 

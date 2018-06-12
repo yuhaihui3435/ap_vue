@@ -106,7 +106,7 @@
 <script>
 import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
-
+var moment = require('moment');
 export default {
   data() {
     return {

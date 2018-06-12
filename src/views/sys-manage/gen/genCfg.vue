@@ -9,17 +9,20 @@
             <v-form v-model="fValid" ref="form" lazy-validation>
                 <v-container grid-list-md>
                   <v-layout wrap>
-                      <v-flex xs12 sm12 md12>
+                      <v-flex xs12 sm6 md4>
                         <v-switch :label="`列表显示`" v-model="config.tableShow"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="` = 查询`" v-show="!config.likeQuery&&!(config.inputType=='date'||config.inputType=='dateTime')" v-model="config.equalQuery"></v-switch>
+                        <v-switch :label="'排序'"  v-model="config.isSort"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="` LIKE 查询`" v-show="!config.equalQuery&&!(config.inputType=='date'||config.inputType=='dateTime')" v-model="config.likeQuery"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="!config.likeQuery&&!(config.inputType=='date'||config.inputType=='dateTime')">
+                        <v-switch :label="` = 查询`"  v-model="config.equalQuery"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="` 日期查询`" v-show="config.inputType=='date'||config.inputType=='dateTime'" v-model="config.dateQuery"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="!config.equalQuery&&!(config.inputType=='date'||config.inputType=='dateTime')">
+                        <v-switch :label="` LIKE 查询`"  v-model="config.likeQuery"></v-switch>
+                      </v-flex>
+                      <v-flex xs12 sm6 md4 v-show="config.inputType=='date'||config.inputType=='dateTime'">
+                        <v-switch :label="` 日期查询`"  v-model="config.dateQuery"></v-switch>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
                         <v-switch :label="`新增显示`" v-model="config.addShow"></v-switch>
@@ -34,38 +37,24 @@
                         <v-select :items="inputTypeList" v-model="config.inputType" label="类型" single-line ></v-select>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="config.min"  label="最小长度"   v-show="config.inputType=='text'||config.inputType=='textArea'"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="config.max"  label="最大长度"    v-show="config.inputType=='text'||config.inputType=='textArea'"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm6 md4>
                         <v-switch :label="'必填'" v-model="config.isRequired"></v-switch>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="'唯一'" v-model="config.onlyOne" v-show="config.inputType=='text'||config.inputType=='textArea'"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
+                        <v-switch :label="'唯一'" v-model="config.onlyOne" ></v-switch>
                       </v-flex>
-                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'是否EMAIL'" v-show="config.inputType=='text'" v-model="config.isEmail"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
+                        <v-text-field v-model="config.min"  label="最小长度"   ></v-text-field>
                       </v-flex>
-                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'是否手机号'" v-show="config.inputType=='text'" v-model="config.isPhone"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
+                        <v-text-field v-model="config.max"  label="最大长度"    ></v-text-field>
                       </v-flex>
-                      <v-flex xs12 sm6 md4>
-                        <v-switch :label="'数字'" v-show="config.inputType=='text'" v-model="config.isNum"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
+                        <v-select :items="regRlues" v-model="config.rule" label="验证规则"  item-value="value" item-text="text"></v-select>
                       </v-flex>
-                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'字母'" v-show="config.inputType=='text'" v-model="config.isChart"></v-switch>
+                      <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
+                        <v-text-field :label="'正则表达式'"  v-model="config.reg"></v-text-field>
                       </v-flex>
-                       <v-flex xs12 sm6 md4>
-                        <v-switch :label="'汉字'" v-show="config.inputType=='text'" v-model="config.isChinese"></v-switch>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field :label="'正则表达式'" v-show="config.inputType=='text'" v-model="config.reg"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 sm12 md12>
-                        <v-text-field :label="'是否排序'"  v-model="config.isSort"></v-text-field>
-                      </v-flex>
+                      
                   </v-layout>
                 </v-container>
             </v-form>
@@ -240,7 +229,22 @@ export default {
         "date",
         "time",
         "slider",
-      ]
+      ],
+      regRlues:[
+        {text:'邮箱',value:'email'},
+        {text:'手机号',value:'phone'},
+        {text:'身份证',value:'ID'},
+        {text:'用户名',value:'userName'},
+        {text:'密码',value:'pwd'},
+        {text:'加强密码',value:'strongPwd'},
+        {text:'数字',value:'digital'},
+        {text:'字母',value:'chart'},
+        {text:'中文',value:'chinese'},
+        {text:'网址',value:'url'},
+        {text:'IP',value:'ip'},
+        {text:'邮编',value:'zipCode'},
+        {text:'金额',value:'amount'},
+      ],
     };
   },
   computed: {
@@ -286,7 +290,17 @@ export default {
         }
       });
     },
-    createAll(item) {},
+    createAll(item) {
+      let param = { tblId: item.id, action: "all" };
+      let vm = this;
+
+      this.$APDialog.confirm(function(ret) {
+        if (ret) {
+          vm.$store.dispatch("gen_code", param).then(res => {});
+        } else {
+        }
+      });
+    },
     toEdit(col) {
       this.dialogTitle = "设置【" + col.col + "】列的配置";
       this.dialog = true;
