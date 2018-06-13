@@ -51,9 +51,9 @@
                       <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
                         <v-select :items="regRlues" v-model="config.rule" label="验证规则"  item-value="value" item-text="text"></v-select>
                       </v-flex>
-                      <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
+                      <!-- <v-flex xs12 sm6 md4 v-show="config.inputType=='text'||config.inputType=='textArea'">
                         <v-text-field :label="'正则表达式'"  v-model="config.reg"></v-text-field>
-                      </v-flex>
+                      </v-flex> -->
                       
                   </v-layout>
                 </v-container>

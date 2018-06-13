@@ -10,7 +10,7 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.loginname"  label="登录账号"
+                              <v-text-field v-model="user.loginname"  label="登录账号" box
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -20,7 +20,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.nickname"  label="昵称"
+                              <v-text-field v-model="user.nickname"  label="昵称" box
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -29,7 +29,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.phone"  label="电话号"
+                              <v-text-field v-model="user.phone"  label="电话号" box
                                   :rules="[
                                   rules.required,
                                   rules.phone,
@@ -39,7 +39,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.email"  label="邮件"
+                              <v-text-field v-model="user.email"  label="邮件" box
                                   :rules="[
                                   rules.email,
                                   (v)=>!!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
@@ -49,7 +49,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='edit'">
-                                <v-select :items="userSelectData" v-model="user.status" label="状态-0:默认,1:禁用"  item-value="value" item-text="text"></v-select>
+                                <v-select :items="userSelectData" v-model="user.status" label="状态"  item-value="value" item-text="text"></v-select>
                            </v-flex>
                   </v-layout>
                 </v-container>
@@ -59,42 +59,39 @@
           <v-spacer></v-spacer>
           <v-btn color="error darken-1" flat @click.native="dialog = false">关闭</v-btn>
           <v-btn color="success darken-1" flat @click.native="save" :loading="loading" v-show="opt=='add'" :disabled="loading||!fValid">保存</v-btn>
-          <v-btn color="success darken-1" flat @click.native="update" v-show="opt=='update'" :loading="loading" :disabled="loading||!fValid">保存</v-btn>
+          <v-btn color="success darken-1" flat @click.native="update" v-show="opt=='edit'" :loading="loading" :disabled="loading||!fValid">保存</v-btn>
         </v-card-actions>
       </v-card>
   </v-dialog>
-  <v-dialog v-model="viewDialog" persistent max-width="500px">
+  <v-dialog v-model="viewDialog" persistent max-width="300px">
         <v-card >
           <v-card-title>
             <span class="headline">查看详细</span>
           </v-card-title>
-          <v-card-text>
-                  <v-container grid-list-md>
-                    <v-layout wrap>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.loginname}}
-                             </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.nickname}}
-                             </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.phone}}
-                             </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.email}}
-                             </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.avatar}}
-                             </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.statusStr}}
-                             </v-flex>
-                                <v-flex xs12 sm6 md4>
-                                    {{userView.cAt | formatDate}}
-                             </v-flex>
-                    </v-layout>
-                  </v-container>
-          </v-card-text>
+            <v-divider></v-divider>
+                  <v-list dense>
+                              <v-list-tile>
+                                    <v-list-tile-content>登录账号:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.loginname}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>昵称:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.nickname}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>电话号:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.phone}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>邮件:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.email}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>头像:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.avatar}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>状态:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.statusStr}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>创建时间:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.cAt | formatDate}}</v-list-tile-content>
+                             </v-list-tile>
+                  </v-list>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="error darken-1" flat @click.native="viewDialog = false">关闭</v-btn>
@@ -122,17 +119,17 @@
                             <v-text-field v-model="userQuery.email"  label="邮件" single-line hide-details ></v-text-field>
                          </v-flex>
                     <v-flex xs12 sm3 md3>
-                        <v-select :items="userSelectData" v-model="userQuery.status" label="状态-0:默认,1:禁用"  item-value="value" item-text="text"></v-select>
+                        <v-select :items="userSelectData" v-model="userQuery.status" label="状态"  item-value="value" item-text="text"></v-select>
                     </v-flex>
                          <v-flex xs12 sm3 md3 >
-                              <v-menu ref="cAtQueryBeginDateMenu" :close-on-content-click="false" v-model="cAtQueryBeginDateMenu" :return-value.sync="userQuery.beginCAt"
+                              <v-menu ref="cAtQueryBeginDateMenu" :close-on-content-click="false" v-model="cAtQueryBeginDateMenu" 
                                    :nudge-right="40" lazy transition="scale-transition" offset-y full-width max-width="290px" min-width="290px" >
                                    <v-text-field slot="activator" v-model="userQuery.beginCAt" label="创建时间查询开始日期" prepend-icon="event" readonly ></v-text-field>
                                    <v-date-picker v-model="userQuery.beginCAt" locale="zh-cn"  @input="$refs.cAtQueryBeginDateMenu.save(userQuery.beginCAt)"></v-date-picker>
                              </v-menu>
                          </v-flex>
                          <v-flex xs12 sm3 md3 >
-                              <v-menu ref="cAtQueryEndDateMenu" :close-on-content-click="false" v-model="cAtQueryEndDateMenu" :return-value.sync="userQuery.endCAt"
+                              <v-menu ref="cAtQueryEndDateMenu" :close-on-content-click="false" v-model="cAtQueryEndDateMenu" 
                                     :nudge-right="40" lazy transition="scale-transition" offset-y full-width max-width="290px" min-width="290px" >
                                     <v-text-field slot="activator" v-model="userQuery.endCAt" label="创建时间查询截至日期" prepend-icon="event" readonly ></v-text-field>
                                     <v-date-picker v-model="userQuery.endCAt" locale="zh-cn"  @input="$refs.cAtQueryEndDateMenu.save(userQuery.endCAt)"></v-date-picker>
@@ -149,7 +146,7 @@
                       </v-layout>
               </v-container>
               </v-card-title>
-            <v-data-table :headers="userHeaders" :items="userList" hide-actions :pagination.sync="userQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
+            <v-data-table :headers="userHeaders" :total-items="totalRow" :items="userList" hide-actions :pagination.sync="userQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
               <template slot="items" slot-scope="props">
                     <td>
                                {{props.item.loginname}}
@@ -199,7 +196,7 @@ export default {
     return {
       fValid: true,
       valid: true,
-      userQuery: { pn: 1 }, //列表查询参数数据对象
+      userQuery: { pn: 1, rowsPerPage: 15, sortBy: "", descending: "" }, //列表查询参数数据对象
       userView: {}, //查询详细数据对象
       loading: false,
       title: "新增用户信息表",
@@ -207,17 +204,17 @@ export default {
       userHeaders: [
         {
           text: "登录账号",
-          sortable: false,
+          sortable: true,
           value: "loginname"
         },
         {
           text: "昵称",
-          sortable: false,
+          sortable: true,
           value: "nickname"
         },
         {
           text: "电话号",
-          sortable: false,
+          sortable: true,
           value: "phone"
         },
         {
@@ -226,13 +223,13 @@ export default {
           value: "email"
         },
         {
-          text: "状态-0:默认,1:禁用",
+          text: "状态",
           sortable: false,
           value: "status"
         },
         {
           text: "创建时间",
-          sortable: false,
+          sortable: true,
           value: "cAt"
         },
         { text: "操作", sortable: false }
@@ -277,7 +274,7 @@ export default {
       this.loading = false;
       this.$refs.form.reset();
       this.opt = "edit";
-      this.$store.commit("setUser", dd);
+      this.$store.commit("setUser", user);
       this.dialog = true;
       this.title = "修改用户信息表";
     },
@@ -323,7 +320,7 @@ export default {
       let vm = this;
       this.$APDialog.confirm(function(ret) {
         if (ret) {
-          vm.$store.dispatch("del_user", { id: user.id }).then(res => {
+          vm.$store.dispatch("del_user", { ids: user.id }).then(res => {
             if (res.resCode == "success") {
               vm.search();
             }
@@ -340,13 +337,30 @@ export default {
       });
     },
     clearQueryParam() {
-      this.userQuery = {};
+      this.userQuery["loginname"] = "";
+      this.userQuery["nickname"] = "";
+      this.userQuery["phone"] = "";
+      this.userQuery["email"] = "";
+      this.userQuery["status"] = "";
+      this.userQuery["beginCAt"] = "";
+      this.userQuery["endCAt"] = "";
     }
   },
   filters: {
     formatDate(time) {
+      if (!!!time) return "";
       var date = new Date(time);
       return moment(date).format("YYYY-MM-DD hh:mm:ss");
+    }
+  },
+  watch: {
+    userQuery: {
+      handler() {
+        if (this.userQuery.sortBy != "") {
+          this.search();
+        }
+      },
+      deep: true
     }
   }
 };

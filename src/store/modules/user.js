@@ -94,7 +94,7 @@ const user = {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/user/get', param).then((res) => {
-          commit('setUser', res)
+          resolve( res)
         });
       })
     },
