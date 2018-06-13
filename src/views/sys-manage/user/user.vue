@@ -1,5 +1,5 @@
 <template>
-<v-container fluid grid-list-md >
+<div>
   <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card >
         <v-card-title>
@@ -10,7 +10,7 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.loginname"  label="登录账号" box
+                              <v-text-field v-model="user.loginname"  label="登录账号" 
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -20,7 +20,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.nickname"  label="昵称" box
+                              <v-text-field v-model="user.nickname"  label="昵称" 
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -29,7 +29,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.phone"  label="电话号" box
+                              <v-text-field v-model="user.phone"  label="电话号" 
                                   :rules="[
                                   rules.required,
                                   rules.phone,
@@ -39,7 +39,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.email"  label="邮件" box
+                              <v-text-field v-model="user.email"  label="邮件" 
                                   :rules="[
                                   rules.email,
                                   (v)=>!!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
@@ -48,8 +48,8 @@
                                   :counter="100">
                               </v-text-field>
                            </v-flex>
-                           <v-flex xs12 sm6 md4 v-show="opt=='edit'">
-                                <v-select :items="userSelectData" v-model="user.status" label="状态"  item-value="value" item-text="text"></v-select>
+                           <v-flex xs12 sm6 md4 v-show="opt=='edit'||opt=='add'">
+                                <v-select :items="userSelectData" v-model="user.status" required label="状态" :rules="[rules.required]" item-value="value"  item-text="text"></v-select>
                            </v-flex>
                   </v-layout>
                 </v-container>
@@ -97,13 +97,11 @@
             <v-btn color="error darken-1" flat @click.native="viewDialog = false">关闭</v-btn>
           </v-card-actions>
         </v-card>
-    </v-dialog>
-  <v-layout row wrap>
-        <v-flex xs12 sm12 md12 >
+  </v-dialog>
           <v-btn slot="activator" color="blue" dark class="mb-2" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
           <v-card >
-              <v-card-title>用户信息表列表
-              <v-spacer></v-spacer>
+              <v-card-title>用户信息表列表</v-card-title>
+              
               <v-container grid-list-md>
                       <v-layout row wrap>
                          <v-flex xs12 sm3 md3>
@@ -118,9 +116,9 @@
                          <v-flex xs12 sm3 md3>
                             <v-text-field v-model="userQuery.email"  label="邮件" single-line hide-details ></v-text-field>
                          </v-flex>
-                    <v-flex xs12 sm3 md3>
-                        <v-select :items="userSelectData" v-model="userQuery.status" label="状态"  item-value="value" item-text="text"></v-select>
-                    </v-flex>
+                        <v-flex xs12 sm3 md3>
+                            <v-select :items="userSelectData" v-model="userQuery.status" label="状态"  item-value="value" item-text="text"></v-select>
+                        </v-flex>
                          <v-flex xs12 sm3 md3 >
                               <v-menu ref="cAtQueryBeginDateMenu" :close-on-content-click="false" v-model="cAtQueryBeginDateMenu" 
                                    :nudge-right="40" lazy transition="scale-transition" offset-y full-width max-width="290px" min-width="290px" >
@@ -145,8 +143,8 @@
                         </v-flex>
                       </v-layout>
               </v-container>
-              </v-card-title>
-            <v-data-table :headers="userHeaders" :total-items="totalRow" :items="userList" hide-actions :pagination.sync="userQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
+              
+            <v-data-table :headers="userHeaders" :total-items="totalRow" :items="userList" :rows-per-page-items="rowsPerPageItems" :pagination.sync="userQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
               <template slot="items" slot-scope="props">
                     <td>
                                {{props.item.loginname}}
@@ -178,14 +176,9 @@
                   </v-btn>
                 </td>
               </template>
-          </v-data-table>
-          <div class="text-xs-center pt-2" v-if="totalPage>0">
-                <v-pagination v-model="userQuery.pn" :length="totalPage"></v-pagination>
-          </div>
+            </v-data-table>
           </v-card>
-        </v-flex>
-  </v-layout>
-</v-container>
+</div> 
 </template>
 <script>
 import { mapState } from "vuex";
@@ -196,7 +189,8 @@ export default {
     return {
       fValid: true,
       valid: true,
-      userQuery: { pn: 1, rowsPerPage: 15, sortBy: "", descending: "" }, //列表查询参数数据对象
+      rowsPerPageItems: [15],
+      userQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
       userView: {}, //查询详细数据对象
       loading: false,
       title: "新增用户信息表",
@@ -238,7 +232,7 @@ export default {
       viewDialog: false,
       opt: "",
       userSelectData: [
-        { text: "默认", value: "0" },
+        { text: "正常", value: "0" },
         { text: "禁用", value: "1" }
       ],
       cAtQueryBeginDateMenu: false,
@@ -260,6 +254,7 @@ export default {
   },
   methods: {
     search() {
+      this.userQuery['pn']=this.userQuery.page;
       this.$store.dispatch("page_user", this.userQuery);
     },
     add() {
@@ -355,8 +350,8 @@ export default {
   },
   watch: {
     userQuery: {
-      handler() {
-        if (this.userQuery.sortBy != "") {
+      handler(val, oldVal) {
+        if (this.userQuery.sortBy != "" || val.page != oldVal.page) {
           this.search();
         }
       },

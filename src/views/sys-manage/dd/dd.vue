@@ -57,7 +57,7 @@
               </v-list-tile-content>
               <v-list-tile-action>
                       <v-btn icon @click="getChildren(item)">
-                        <v-icon color="deep-purple darken-3">fas fa-eye</v-icon>
+                        <v-icon color="teal">fas fa-eye</v-icon>
                       </v-btn>
               </v-list-tile-action>
                <v-list-tile-action @click="toAdd(item.name,item.id,item.dict)">

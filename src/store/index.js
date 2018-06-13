@@ -5,6 +5,9 @@ import param from './modules/param';
 import dd from './modules/dd';
 import gen from './modules/gen';
 import user from './modules/user';
+import role from './modules/role';
+import res from './modules/res';
+import ser from './modules/ser';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -60,6 +63,9 @@ const store = new Vuex.Store({
     dd,
     gen,
     user,
+    role,
+    res,
+    ser,
   }
 });
 

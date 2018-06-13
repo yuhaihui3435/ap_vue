@@ -11,13 +11,14 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "comment": "0.0.2",
     "es6-promise": "^4.2.4",
     "js-cookie": "^2.2.0",
     "moment": "^2.22.2",
     "qs": "^6.5.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.0.0",
+    "vuetify": "^1.1.0-beta.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

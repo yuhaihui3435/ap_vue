@@ -10,7 +10,7 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="role.code"  label="编号" required :disabled="opt=='edit'"
+                              <v-text-field v-model="ser.code"  label="编号" required :disabled="opt=='edit'"
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -18,8 +18,20 @@
                                   :counter="50">
                               </v-text-field>
                            </v-flex>
-                           <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'" >
-                              <v-text-field v-model="role.name"  label="角色名" required
+                           <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
+                                <v-select :items="serSelectData" v-model="ser.type" :rules="[rules.required]" label="类型" required item-value="value" item-text="text"></v-select>
+                           </v-flex>
+                           <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
+                              <v-text-field v-model="ser.name"  label="标题" required
+                                  :rules="[
+                                  rules.required,
+                                  (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
+                                  ]"
+                                  :counter="50">
+                              </v-text-field>
+                           </v-flex>
+                           <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
+                              <v-text-field v-model="ser.url"  label="URL" required
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -47,13 +59,16 @@
             <v-divider></v-divider>
                   <v-list dense>
                               <v-list-tile>
-                                    <v-list-tile-content>角色名:</v-list-tile-content><v-list-tile-content class="align-end">{{roleView.name}}</v-list-tile-content>
+                                    <v-list-tile-content>编号:</v-list-tile-content><v-list-tile-content class="align-end">{{serView.code}}</v-list-tile-content>
                              </v-list-tile>
                               <v-list-tile>
-                                    <v-list-tile-content>编号:</v-list-tile-content><v-list-tile-content class="align-end">{{roleView.code}}</v-list-tile-content>
+                                    <v-list-tile-content>类型:</v-list-tile-content><v-list-tile-content class="align-end">{{serView.typeStr}}</v-list-tile-content>
                              </v-list-tile>
                               <v-list-tile>
-                                    <v-list-tile-content>创建时间:</v-list-tile-content><v-list-tile-content class="align-end">{{roleView.cAt}}</v-list-tile-content>
+                                    <v-list-tile-content>标题:</v-list-tile-content><v-list-tile-content class="align-end">{{serView.name}}</v-list-tile-content>
+                             </v-list-tile>
+                              <v-list-tile>
+                                    <v-list-tile-content>URL:</v-list-tile-content><v-list-tile-content class="align-end">{{serView.url}}</v-list-tile-content>
                              </v-list-tile>
                   </v-list>
           <v-card-actions>
@@ -64,14 +79,14 @@
     </v-dialog>
           <v-btn slot="activator" color="blue" dark class="mb-2" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
           <v-card >
-              <v-card-title>角色表列表</v-card-title>
-              <v-container grid-list-sm>
+              <v-card-title>服务列表</v-card-title>
+              <v-container grid-list-md>
                       <v-layout row wrap>
                          <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="roleQuery.code"  label="编号" single-line hide-details ></v-text-field>
+                            <v-text-field v-model="serQuery.code"  label="编号" single-line hide-details ></v-text-field>
                          </v-flex>
                          <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="roleQuery.name"  label="角色名" single-line hide-details ></v-text-field>
+                            <v-text-field v-model="serQuery.name"  label="标题" single-line hide-details ></v-text-field>
                          </v-flex>
                         <v-flex xs12 sm3 md3>
                              <v-btn color="info" class="white--text" @click="search()">
@@ -83,17 +98,19 @@
                         </v-flex>
                       </v-layout>
               </v-container>
-              
-            <v-data-table :headers="roleHeaders" :total-items="totalRow" :items="roleList" :rows-per-page-items="rowsPerPageItems" :pagination.sync="roleQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
+            <v-data-table :headers="serHeaders" :total-items="totalRow" :items="serList" :rows-per-page-items="rowsPerPageItems" :pagination.sync="serQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
               <template slot="items" slot-scope="props">
-                    <td>
-                               {{props.item.name}}
-                    </td>
                     <td>
                                {{props.item.code}}
                     </td>
                     <td>
-                               {{props.item.cAt}}
+                               {{props.item.typeStr}}
+                    </td>
+                    <td>
+                               {{props.item.name}}
+                    </td>
+                    <td>
+                               {{props.item.url}}
                     </td>
                 <td class=" layout px-0">
                   <v-btn icon class="mx-0" @click="edit(props.item)">
@@ -108,9 +125,6 @@
                 </td>
               </template>
           </v-data-table>
-          <!-- <div class="text-xs-center pt-2" v-if="totalPage>0">
-                <v-pagination v-model="roleQuery.pn" :length="totalPage"></v-pagination>
-          </div> -->
           </v-card>
 </div>
 </template>
@@ -122,43 +136,49 @@ export default {
     return {
       fValid: true,
       valid: true,
-      rowsPerPageItems:[15],
-      roleQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
-      roleView: {}, //查询详细数据对象
+      rowsPerPageItems: [15],
+      serQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
+      serView: {}, //查询详细数据对象
       loading: false,
-      title: "新增角色表",
+      title: "新增服务",
       rules: Kit.inputRules,
-      roleHeaders: [
-        {
-          text: "角色名",
-          sortable: true,
-          value: "name"
-        },
+      serHeaders: [
         {
           text: "编号",
-          sortable: true,
+          sortable: false,
           value: "code"
         },
         {
-          text: "创建时间",
+          text: "类型",
           sortable: false,
-          value: "cAt"
+          value: "type"
+        },
+        {
+          text: "标题",
+          sortable: false,
+          value: "name"
+        },
+        {
+          text: "URL",
+          sortable: false,
+          value: "url"
         },
         { text: "操作", sortable: false }
       ],
       dialog: false,
       viewDialog: false,
-      opt: ""
+      opt: "",
+      serSelectData: [{ text: "服务", value: "0" }]
     };
   },
   computed: {
     ...mapState({
-      role: state => state.role.role,
-      roleList: state => state.role.roleList,
-      totalRow: state => state.role.totalRow,
-      pageNumber: state => state.role.pageNumber,
-      pageSize: state => state.role.pageSize,
-      totalPage: state => state.role.totalPage
+      ser: state => state.ser.ser,
+      serList: state => state.ser.serList,
+      totalRow: state => state.ser.totalRow,
+      pageNumber: state => state.ser.pageNumber,
+      pageSize: state => state.ser.pageSize,
+      totalPage: state => state.ser.totalPage
     })
   },
   mounted() {
@@ -166,31 +186,31 @@ export default {
   },
   methods: {
     search() {
-      this.roleQuery['pn']=this.roleQuery.page;
-      this.$store.dispatch("page_role", this.roleQuery);
+      this.serQuery["pn"] = this.serQuery.page;
+      this.$store.dispatch("page_ser", this.serQuery);
     },
     add() {
       this.loading = false;
       this.$refs.form.reset();
       this.opt = "add";
-      this.$store.commit("setRole", {});
-      this.title = "新增角色表";
+      this.$store.commit("setSer", {});
+      this.title = "新增服务";
       this.dialog = true;
     },
-    edit(role) {
+    edit(ser) {
       this.loading = false;
       this.$refs.form.reset();
       this.opt = "edit";
-      this.$store.commit("setRole", role);
+      this.$store.commit("setSer", ser);
       this.dialog = true;
-      this.title = "修改角色表";
+      this.title = "修改服务";
     },
     save() {
       let vm = this;
       this.loading = true;
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("save_role")
+          .dispatch("save_ser")
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -204,12 +224,12 @@ export default {
           });
       }
     },
-    update(role) {
+    update(ser) {
       let vm = this;
       this.loading = true;
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("update_role")
+          .dispatch("update_ser")
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -223,11 +243,11 @@ export default {
           });
       }
     },
-    del(role) {
+    del(ser) {
       let vm = this;
       this.$APDialog.confirm(function(ret) {
         if (ret) {
-          vm.$store.dispatch("del_role", { ids: role.id }).then(res => {
+          vm.$store.dispatch("del_ser", { ids: ser.id }).then(res => {
             if (res.resCode == "success") {
               vm.search();
             }
@@ -236,23 +256,22 @@ export default {
         }
       });
     },
-    view(role) {
+    view(ser) {
       let vm = this;
       vm.viewDialog = true;
-      vm.$store.dispatch("get_role", { id: role.id }).then(res => {
-        vm.roleView = res;
+      vm.$store.dispatch("get_ser", { id: ser.id }).then(res => {
+        vm.serView = res;
       });
     },
     clearQueryParam() {
-      this.roleQuery["name"] = "";
-      this.roleQuery["code"] = "";
+      this.serQuery["code"] = "";
+      this.serQuery["name"] = "";
     }
   },
   watch: {
-    roleQuery: {
-      handler(val,oldVal) {
-        
-        if ((this.roleQuery.sortBy != "")||(val.page!=oldVal.page)) {
+    serQuery: {
+      handler(val, oldVal) {
+        if (this.serQuery.sortBy != "" || val.page != oldVal.page) {
           this.search();
         }
       },

@@ -15,10 +15,6 @@ export const loginRouter = {
     require(['@/views/login.vue'], resolve);
   }
 };
-
-
-
-
 export const otherRouter = {
   path: '/',
   name: 'otherRouter',
@@ -102,6 +98,16 @@ export const appRouter = [{
       name: 'sm_res',
       component: resolve => {
         require(['@/views/sys-manage/res/res.vue'], resolve);
+      }
+    },
+    {
+      path: 'ser',
+      title: '服务管理',
+      meta:{title:'服务管理'},
+      icon: "http",
+      name: 'sm_ser',
+      component: resolve => {
+        require(['@/views/sys-manage/ser/ser.vue'], resolve);
       }
     },
     {
