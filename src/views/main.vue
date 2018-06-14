@@ -7,7 +7,6 @@
 							</v-breadcrumbs-item>
         </v-breadcrumbs>
           <v-container fluid>
-            <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear>
             <router-view></router-view>
           </v-container>
     </div>

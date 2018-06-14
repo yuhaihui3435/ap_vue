@@ -46,6 +46,7 @@ Vue.use(Vuetify, {
     warning: '#FFC107'
   }
 })
+
 Vue.use(APDialog)
 Vue.config.productionTip = false
 Vue.prototype.$http = http;

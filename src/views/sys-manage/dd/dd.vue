@@ -1,29 +1,29 @@
 <template>
 
-<v-container fluid grid-list-md >
+<div>
   <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card >
         <v-card-title>
           <span class="headline">{{title}}</span>
         </v-card-title>
         <v-card-text>
-            <v-form v-model="fValid" ref="form" lazy-validation>
+            <v-form v-model="fValid" ref="form" lazy-validation @submit.prevent>
                 <v-container grid-list-md>
                   <v-layout wrap>
                       <v-flex xs12 sm6 md4>   
-                        <v-text-field v-model="dd.dict"  label="字典名"  :disabled="pName!=''||opt=='update'" :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.dict"  label="字典名"  :disabled="pName!=''||opt=='update'" :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
                         <v-text-field v-model="pName"  label="上级名字"   disabled></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="dd.name"  label="名字"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.name"  label="名字"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="dd.val"  label="值"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.val"  label="值"  :rules="[(v) => !!!v||(v!=undefined&&v.length <= 50) || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="dd.idx"  label="序号"  :rules="[rules.digital]"></v-text-field>
+                        <v-text-field v-model="vo.idx"  label="序号"  :rules="[rules.digital]"></v-text-field>
                       </v-flex>
                   </v-layout>
                 </v-container>
@@ -36,7 +36,8 @@
           <v-btn color="success darken-1" flat @click.native="update" v-show="opt=='update'" :loading="loading" :disabled="loading||!fValid">保存</v-btn>
         </v-card-actions>
       </v-card>
-      </v-dialog>
+  </v-dialog>
+  <v-container fluid grid-list-md>
     <v-layout row wrap>
     <v-flex xs12 sm4 md4 >
       <v-card>
@@ -60,7 +61,7 @@
                         <v-icon color="teal">fas fa-eye</v-icon>
                       </v-btn>
               </v-list-tile-action>
-               <v-list-tile-action @click="toAdd(item.name,item.id,item.dict)">
+               <v-list-tile-action @click="toAdd(item)">
                       <v-btn icon >
                         <v-icon color="blue">add_circle_outline</v-icon>
                       </v-btn>
@@ -79,8 +80,6 @@
         </v-list>
       </v-card>
     </v-flex>
-    
-      
     <v-flex xs12 sm8 md8 >
       <v-card >
         <v-toolbar color="blue" dark>
@@ -107,7 +106,8 @@
       </v-card>
     </v-flex>
   </v-layout>
-</v-container>
+  </v-container>
+</div>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -116,12 +116,12 @@ export default {
   data() {
     return {
       fValid: true,
-      valid: true,
       loading: false,
       title: "新增数据字典",
       ddListTitle: "字典数据列表",
       pName: "",
       pId: "",
+      vo:{},
       rules: Kit.inputRules,
       icon: "menu",
       headers: [
@@ -160,13 +160,13 @@ export default {
     },
     save() {
       let vm = this;
-      this.loading = true;
+      
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
-          .dispatch("save_dd")
+          .dispatch("save_dd",this.vo)
           .then(res => {
             this.loading = false;
-
             if (res.resCode == "success") {
               this.dialog = false;
               if (vm.pName == "") {
@@ -182,15 +182,28 @@ export default {
           });
       }
     },
-    toAdd(pName, pId, dict) {
+    toAdd(item) {
+      let vm=this;
+      this.loading = false;
       this.$refs.form.reset();
-      this.opt = "add";
-      this.selectId = pId != undefined ? pId : 0;
-      this.$store.commit("setDd", { pId: this.selectId, dict: dict });
-      this.pName = pName != undefined ? pName : "";
-      if (this.pName == "") this.title = "新增数据字典";
-      else this.title = "新增数据字典值";
       this.dialog = true;
+      this.opt = "add";
+      let data={}
+      if(item==undefined){
+        data.pId=0;
+        this.selectId=0;
+        this.title="新增数据字典";
+        this.pName='';
+      }else{
+        this.pName=item.name;
+        this.selectId=item.id;
+        this.title="新增数据字典值";
+        data.pId=item.id;
+        data.dict=item.dict;
+      }
+      this.$nextTick(function(){
+        vm.vo=Object.assign({},data);
+      });
     },
     getChildren(dd) {
       if (dd.id == undefined) this.$store.commit("setDdChildren", []);
@@ -200,19 +213,22 @@ export default {
       this.selectId = dd.id;
     },
     toEdit(dd) {
+      let vm=this;
+      this.loading = false;
       this.$refs.form.reset();
       this.opt = "update";
-      this.$store.commit("setDd", dd);
       this.dialog = true;
       this.selectId = dd.pId;
       this.title = dd.pId == 0 ? "修改数据字典" : "修改数据字典值";
+      this.$nextTick(function(){vm.vo=Object.assign({},dd)})
     },
     update(dd) {
       let vm = this;
-      this.loading = true;
+      
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
-          .dispatch("update_dd")
+          .dispatch("update_dd",this.vo)
           .then(res => {
             this.loading = false;
             if (res.resCode == "success") {
@@ -250,7 +266,10 @@ export default {
         }
       });
     }
-  }
+  },
+  // watch: {
+  //   dd(val, oldVal) {}
+  // }
 };
 </script>
 <style>

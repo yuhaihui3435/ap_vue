@@ -10,7 +10,7 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="role.code"  label="编号" required :disabled="opt=='edit'"
+                              <v-text-field v-model="vo.code"  label="编号" required :disabled="opt=='edit'"
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -19,7 +19,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'" >
-                              <v-text-field v-model="role.name"  label="角色名" required
+                              <v-text-field v-model="vo.name"  label="角色名" required
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -122,6 +122,7 @@ export default {
     return {
       fValid: true,
       valid: true,
+      vo:{},
       rowsPerPageItems:[15],
       roleQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
       roleView: {}, //查询详细数据对象
@@ -173,24 +174,22 @@ export default {
       this.loading = false;
       this.$refs.form.reset();
       this.opt = "add";
-      this.$store.commit("setRole", {});
       this.title = "新增角色表";
       this.dialog = true;
     },
     edit(role) {
       this.loading = false;
-      this.$refs.form.reset();
       this.opt = "edit";
-      this.$store.commit("setRole", role);
+      this.vo=Object.assign({},role)
       this.dialog = true;
       this.title = "修改角色表";
     },
     save() {
       let vm = this;
-      this.loading = true;
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
-          .dispatch("save_role")
+          .dispatch("save_role",this.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -206,10 +205,10 @@ export default {
     },
     update(role) {
       let vm = this;
-      this.loading = true;
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
-          .dispatch("update_role")
+          .dispatch("update_role",this.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {

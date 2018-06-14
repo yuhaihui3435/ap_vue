@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    
     <v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed app>
       <v-list>
         <v-list-group v-model="item.path == currOpenedMenu" v-for="(item, i) in menuList" :key="i" :prepend-icon="item.icon" no-action>
@@ -41,6 +42,7 @@
       </v-menu>
     </v-toolbar>
     <v-content>
+        <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear>
 				<router-view/>
     </v-content>
     <v-footer :fixed="fixed" app>
@@ -97,6 +99,7 @@ export default {
       currOpenedMenu:state=>state.currOpenedMenu,
       currMenuItem:state=>state.currMenuItem,
       snackbar:state=>state.snackbar,
+      loadingStatus:state=>state.loadingStatus
     }),
     // breadcrumbsList:function(){
     //   return JSON.parse(sessionStorage.getItem('breadcrumbsList'));

@@ -53,7 +53,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/save', state.role).then((res) => {
+        vm.$http.post('/api/role/save',param).then((res) => {
           resolve(res)
         });
       })
@@ -65,7 +65,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/update', state.role).then((res) => {
+        vm.$http.post('/api/role/update', param).then((res) => {
           resolve(res)
         });
       })

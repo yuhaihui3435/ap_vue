@@ -30,7 +30,7 @@ const dd = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/save', state.dd).then((res) => {
+          vm.$http.post('/api/dd/save', param).then((res) => {
               resolve(res)
           });
         })
@@ -42,7 +42,7 @@ const dd = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/update', state.dd).then((res) => {
+          vm.$http.post('/api/dd/update', param).then((res) => {
               resolve(res)
           });
         })
