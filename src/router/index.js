@@ -92,8 +92,8 @@ export const appRouter = [{
     },
     {
       path: 'res',
-      title: '资源管理',
-      meta:{title:'资源管理'},
+      title: '菜单管理',
+      meta:{title:'菜单管理'},
       icon: "poll",
       name: 'sm_res',
       component: resolve => {

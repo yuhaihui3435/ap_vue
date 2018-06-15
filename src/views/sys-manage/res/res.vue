@@ -9,8 +9,12 @@
             <v-form v-model="fValid" ref="form" lazy-validation>
                 <v-container grid-list-md>
                   <v-layout wrap>
+                          <v-flex xs12 sm12 md12 v-show="opt=='add'||opt=='edit'" v-if="!!treeRoot">
+                              <v-text-field v-model="treeRoot.name"  label="上级菜单" disabled>
+                              </v-text-field>
+                           </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="res.code"  label="编号" required
+                              <v-text-field v-model="vo.code"  label="编号" required
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -19,7 +23,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="res.name"  label="资源名" required
+                              <v-text-field v-model="vo.name"  label="菜单名" required
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
@@ -28,7 +32,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="res.url"  label="资源url" 
+                              <v-text-field v-model="vo.url"  label="菜单url" 
                                   :rules="[
                                   (v)=>!!!v||(v!=undefined&&v.length <= 255) || '最多 255 字符',
                                   ]"
@@ -36,7 +40,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="res.seq"  label="顺序" 
+                              <v-text-field v-model="vo.seq"  label="顺序" 
                                   :rules="[
                                   rules.digital,
                                   ]"
@@ -44,7 +48,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="res.icon"  label="图标" 
+                              <v-text-field v-model="vo.icon"  label="图标" 
                                   :rules="[
                                   (v)=>!!!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
                                   ]"
@@ -52,10 +56,10 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                                <v-select :items="resSelectData" v-model="res.logged" label="记录日志"  item-value="value" item-text="text"></v-select>
+                                <v-select :items="resSelectData" v-model="vo.logged" label="记录日志"  item-value="value" item-text="text"></v-select>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                                <v-select :items="resSelectData" v-model="res.enabled" label="是否可用"  item-value="value" item-text="text"></v-select>
+                                <v-select :items="resSelectData" v-model="vo.enabled" label="是否可用"  item-value="value" item-text="text"></v-select>
                            </v-flex>
                   </v-layout>
                 </v-container>
@@ -80,10 +84,10 @@
                                     <v-list-tile-content>编号:</v-list-tile-content><v-list-tile-content class="align-end">{{resView.code}}</v-list-tile-content>
                              </v-list-tile>
                               <v-list-tile>
-                                    <v-list-tile-content>资源名:</v-list-tile-content><v-list-tile-content class="align-end">{{resView.name}}</v-list-tile-content>
+                                    <v-list-tile-content>菜单名:</v-list-tile-content><v-list-tile-content class="align-end">{{resView.name}}</v-list-tile-content>
                              </v-list-tile>
                               <v-list-tile>
-                                    <v-list-tile-content>资源url:</v-list-tile-content><v-list-tile-content class="align-end">{{resView.url}}</v-list-tile-content>
+                                    <v-list-tile-content>菜单url:</v-list-tile-content><v-list-tile-content class="align-end">{{resView.url}}</v-list-tile-content>
                              </v-list-tile>
                               <v-list-tile>
                                     <v-list-tile-content>顺序:</v-list-tile-content><v-list-tile-content class="align-end">{{resView.seq}}</v-list-tile-content>
@@ -103,17 +107,34 @@
             <v-btn color="error darken-1" flat @click.native="viewDialog = false">关闭</v-btn>
           </v-card-actions>
         </v-card>
-    </v-dialog>
-          <v-btn slot="activator" color="blue" dark class="mb-2" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
-          <v-card >
-              <v-card-title>资源列表</v-card-title>
+        </v-dialog>
+       <v-container grid-list-md >
+        <v-layout row wrap>
+        <v-flex xs12 sm6 md4>
+          <v-toolbar color="blue" >
+          <v-toolbar-title  class="white--text">菜单树</v-toolbar-title>
+          <v-divider class="mx-3" inset vertical dark  ></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+          <v-card > 
+            <treeselect ref="resTree" v-model="treeVal" valueFormat="object" :noChildrenText="'没有子菜单'" :noOptionsText="'没有数据'" :load-options="loadOptions" :placeholder="'请选择...'"  :options="treeData" />
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm6 md8>
+          <v-toolbar color="blue" >
+          <v-toolbar-title  class="white--text">菜单列表</v-toolbar-title>
+          <v-divider class="mx-3" inset vertical dark  ></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn  @click.native="add()" class="blue--text"   >新增子菜单<v-icon>add</v-icon></v-btn>
+        </v-toolbar>
+        <v-card > 
               <v-container grid-list-md>
                       <v-layout row wrap>
                           <v-flex xs12 sm3 md3>
                             <v-text-field v-model="resQuery.code"  label="编号" single-line hide-details ></v-text-field>
                          </v-flex>
                          <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="resQuery.name"  label="资源名" single-line hide-details ></v-text-field>
+                            <v-text-field v-model="resQuery.name"  label="菜单名" single-line hide-details ></v-text-field>
                          </v-flex>
                         <v-flex xs12 sm3 md3>
                             <v-select :items="resSelectData" v-model="resQuery.enabled" label="是否可用"  item-value="value" item-text="text"></v-select>
@@ -165,22 +186,32 @@
               </template>
           </v-data-table>
           </v-card>
+          </v-flex>
+          </v-layout>
+       </v-container>
 </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 export default {
+  components: { Treeselect },
   data() {
     return {
       fValid: true,
       valid: true,
       rowsPerPageItems: [15],
-      resQuery: { pn: 1,  sortBy: "", descending: "" }, //列表查询参数数据对象
+      resQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
       resView: {}, //查询详细数据对象
       loading: false,
-      title: "新增资源",
+      title: "新增菜单",
       rules: Kit.inputRules,
+      vo: {},
+      treeData: [],
+      treeVal: null,
+      treeRoot:{id:'',name:''},
       resHeaders: [
         {
           text: "编号",
@@ -188,12 +219,12 @@ export default {
           value: "code"
         },
         {
-          text: "资源名",
+          text: "菜单名",
           sortable: true,
           value: "name"
         },
         {
-          text: "资源url",
+          text: "菜单url",
           sortable: false,
           value: "url"
         },
@@ -237,35 +268,49 @@ export default {
     })
   },
   mounted() {
-      this.resQuery['pn']=this.resQuery.page;
-    this.search();
+    this.$store.dispatch("get_res_tree_json").then(res => {
+      this.treeData = res;
+    });
+
+    // this.resQuery['pn']=this.resQuery.page;
+    // this.search();
   },
   methods: {
+    loadOptions({ action, parentNode, callback }) {
+      let vm = this;
+      if (action === LOAD_CHILDREN_OPTIONS) {
+        let pId = parentNode.id;
+        vm.$store.dispatch();
+      }
+    },
     search() {
       this.$store.dispatch("page_res", this.resQuery);
     },
     add() {
+      let vm = this;
       this.loading = false;
+      let treeRoot = Object.assign({id:0,name:'根菜单'},this.treeVal);
       this.$refs.form.reset();
+      this.$nextTick(function(){
+        vm.treeRoot=treeRoot;
+      })
       this.opt = "add";
-      this.$store.commit("setRes", {});
-      this.title = "新增资源";
+      this.title = "新增菜单";
       this.dialog = true;
     },
     edit(res) {
       this.loading = false;
-      this.$refs.form.reset();
       this.opt = "edit";
-      this.$store.commit("setRes", res);
       this.dialog = true;
-      this.title = "修改资源";
+      this.title = "修改菜单";
     },
     save() {
       let vm = this;
-      this.loading = true;
+
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
-          .dispatch("save_res")
+          .dispatch("save_res", vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -281,10 +326,11 @@ export default {
     },
     update(res) {
       let vm = this;
-      this.loading = true;
+
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
-          .dispatch("update_res")
+          .dispatch("update_res", vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -326,8 +372,11 @@ export default {
   },
   watch: {
     resQuery: {
-      handler(val,oldVal) {
-        if (this.resQuery.sortBy != ""||val.page!=oldVal.page) {
+      handler(val, oldVal) {
+        if (
+          this.resQuery.sortBy != "" ||
+          (oldVal.page != undefined && val.page != oldVal.page)
+        ) {
           this.search();
         }
       },

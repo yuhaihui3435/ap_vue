@@ -62,9 +62,14 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
-          <v-btn slot="activator" color="blue" dark class="mb-2" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
+          <v-toolbar color="blue" >
+          <v-toolbar-title  class="white--text">角色表列表</v-toolbar-title>
+          <v-divider class="mx-3" inset vertical dark  ></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn  @click.native="add()" class="blue--text"   >新增<v-icon>add</v-icon></v-btn>
+        </v-toolbar>
+          
           <v-card >
-              <v-card-title>角色表列表</v-card-title>
               <v-container grid-list-sm>
                       <v-layout row wrap>
                          <v-flex xs12 sm3 md3>
@@ -74,10 +79,10 @@
                             <v-text-field v-model="roleQuery.name"  label="角色名" single-line hide-details ></v-text-field>
                          </v-flex>
                         <v-flex xs12 sm3 md3>
-                             <v-btn color="info" class="white--text" @click="search()">
+                             <v-btn color="primary" class="white--text" @click="search()">
                                  搜索<v-icon>search</v-icon>
                              </v-btn>
-                             <v-btn color="info" class="white--text" @click="clearQueryParam()">
+                             <v-btn color="primary" class="white--text" @click="clearQueryParam()">
                                  清空<v-icon>clear</v-icon>
                              </v-btn>
                         </v-flex>

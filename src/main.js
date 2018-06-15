@@ -37,13 +37,13 @@ Vue.use(Vuetify, {
       VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker,Vpagination,VDivider
   },
   theme: {
-    primary: '#ee44aa',
-    secondary: '#424242',
-    accent: '#82B1FF',
-    error: '#FF5252',
-    info: '#2196F3',
-    success: '#4CAF50',
-    warning: '#FFC107'
+    primary: "#2196F3",
+  secondary: "#64B5F6",
+  accent: "#FF3D00",
+  error: "#D50000",
+  warning: "#ffeb3b",
+  info: "#303F9F",
+  success: "#4CAF50"
   }
 })
 

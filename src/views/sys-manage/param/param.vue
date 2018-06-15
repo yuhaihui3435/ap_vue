@@ -1,13 +1,13 @@
 <template>
-  
+  <v-card>
     <v-form v-model="valid">
-         <v-tabs color="blue"  icons-and-text dark slider-color="pink">
+         <v-tabs color="blue"  icons-and-text dark >
              
-             <v-tab  ripple href="#tab-2">
+             <v-tab   href="#tab-2">
                 图片储存服务设置
                 <v-icon>image</v-icon>
              </v-tab>
-             <v-tab  ripple href="#tab-3">
+             <v-tab   href="#tab-3">
                 短信服务设置
                 <v-icon>sms</v-icon>
              </v-tab>
@@ -34,10 +34,10 @@
              </v-tab-item>
             
          </v-tabs>
-         <v-btn color="success" @click="save" :loading="loading" :disabled="loading" >保存</v-btn>
-         <v-btn color="success">刷新缓存</v-btn>
+         <v-btn color="primary"  @click="save" :loading="loading" :disabled="loading" >保存</v-btn>
+         <v-btn color="primary">刷新缓存</v-btn>
     </v-form>
-
+  </v-card>
     
 </template>
 <script>

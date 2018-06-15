@@ -59,7 +59,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/save', state.res).then((res) => {
+          vm.$http.post('/api/res/save', param).then((res) => {
               resolve(res)
           });
         })
@@ -71,7 +71,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/update', state.res).then((res) => {
+          vm.$http.post('/api/res/update', param).then((res) => {
               resolve(res)
           });
         })
@@ -94,6 +94,17 @@ const res = {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/res/get', param).then((res) => {
+              resolve(res)
+          });
+        })
+      },
+      get_res_tree_json: function ({
+        commit,
+        state
+      }, param) {
+          let vm=this._vm;
+        return new Promise(function (resolve, reject) {
+          vm.$http.post('/api/res/getTreeJson', param).then((res) => {
               resolve(res)
           });
         })

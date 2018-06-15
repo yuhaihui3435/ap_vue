@@ -98,9 +98,13 @@
           </v-card-actions>
         </v-card>
   </v-dialog>
-          <v-btn slot="activator" color="blue" dark class="mb-2" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
+          <v-toolbar color="blue" >
+          <v-toolbar-title class="white--text">用户信息表列表</v-toolbar-title>
+          <v-divider class="mx-3" inset vertical dark  ></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn  class="blue--text" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
+          </v-toolbar>
           <v-card >
-              <v-card-title>用户信息表列表</v-card-title>
               
               <v-container grid-list-md>
                       <v-layout row wrap>
@@ -134,10 +138,10 @@
                               </v-menu>
                          </v-flex>
                         <v-flex xs12 sm3 md3>
-                             <v-btn color="info" class="white--text" @click="search()">
+                             <v-btn color="primary" class="white--text" @click="search()">
                                  搜索<v-icon>search</v-icon>
                              </v-btn>
-                             <v-btn color="info" class="white--text" @click="clearQueryParam()">
+                             <v-btn color="primary" class="white--text" @click="clearQueryParam()">
                                  清空<v-icon>clear</v-icon>
                              </v-btn>
                         </v-flex>
@@ -267,7 +271,7 @@ export default {
     },
     edit(user) {
       this.loading = false;
-      this.$refs.form.reset();
+      // this.$refs.form.reset();
       this.opt = "edit";
       this.$store.commit("setUser", user);
       this.dialog = true;

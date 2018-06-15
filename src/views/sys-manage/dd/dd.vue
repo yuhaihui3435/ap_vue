@@ -189,13 +189,14 @@ export default {
       this.dialog = true;
       this.opt = "add";
       let data={}
+      let _pName;
       if(item==undefined){
         data.pId=0;
         this.selectId=0;
         this.title="新增数据字典";
-        this.pName='';
+        _pName='';
       }else{
-        this.pName=item.name;
+        _pName=item.name;
         this.selectId=item.id;
         this.title="新增数据字典值";
         data.pId=item.id;
@@ -203,6 +204,7 @@ export default {
       }
       this.$nextTick(function(){
         vm.vo=Object.assign({},data);
+        vm.pName=_pName;
       });
     },
     getChildren(dd) {
@@ -211,16 +213,23 @@ export default {
         this.ddListTitle = "字典【" + dd.name + "】数据列表";
       this.$store.dispatch("get_dd_children", { id: dd.id });
       this.selectId = dd.id;
+      this.pName=dd.name;
     },
     toEdit(dd) {
       let vm=this;
       this.loading = false;
+      let _pName;
+      if(dd.pId!=0)
+       _pName=this.pName;
       this.$refs.form.reset();
       this.opt = "update";
       this.dialog = true;
       this.selectId = dd.pId;
       this.title = dd.pId == 0 ? "修改数据字典" : "修改数据字典值";
-      this.$nextTick(function(){vm.vo=Object.assign({},dd)})
+      this.$nextTick(function(){
+        vm.vo=Object.assign({},dd)
+        vm.pName=_pName;
+      })
     },
     update(dd) {
       let vm = this;
