@@ -62,6 +62,36 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
+    <v-dialog v-model="setResDialog" persistent max-width="300px"  scrollable>
+        <v-card >
+          <v-card-title>
+            <span class="headline">设置菜单</span>
+          </v-card-title>
+            <v-divider></v-divider>
+           <v-card-text  style="height:500px;overflow-y:true;">
+            <treeselect ref="resTree" v-model="vo.reses"  :value-consists-of="'ALL_WITH_INDETERMINATE'"  valueFormat="object" :noChildrenText="'没有子菜单'"   :noOptionsText="'没有数据'"  :placeholder="'请选择...'" :flat= :multiple="true"  :options="treeData" />    
+          </v-card-text>      
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error darken-1" flat @click.native="setResDialog = false">关闭</v-btn>
+            <v-btn color="success darken-1" flat @click.native="saveRoleReses" :loading="loading" :disabled="loading">保存</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog v-model="setSerDialog" persistent max-width="300px">
+        <v-card >
+          <v-card-title>
+            <span class="headline">设置服务</span>
+          </v-card-title>
+            <v-divider></v-divider>
+            <treeselect ref="serTree" v-model="vo.sers" :flat="true"  valueFormat="object"  :noChildrenText="'没有子服务'"  :noOptionsText="'没有数据'"  :placeholder="'请选择...'"  :multiple="true"  /> 
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error darken-1" flat @click.native="setSerDialog = false">关闭</v-btn>
+            <v-btn color="success darken-1" flat @click.native="saveRoleSers" :loading="loading" :disabled="loading">保存</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
           <v-toolbar color="blue" >
           <v-toolbar-title  class="white--text">角色表列表</v-toolbar-title>
           <v-divider class="mx-3" inset vertical dark  ></v-divider>
@@ -110,6 +140,18 @@
                   <v-btn icon class="mx-0" @click="view(props.item)">
                       <v-icon color="teal">fas fa-eye</v-icon>
                   </v-btn>
+                  <v-tooltip bottom>
+                  <v-btn slot="activator" icon class="mx-0" @click="setRes(props.item)">
+                      <v-icon color="teal">poll</v-icon>
+                  </v-btn>
+                  <span>设置菜单</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                  <v-btn slot="activator" icon class="mx-0" @click="setSer(props.item)">
+                      <v-icon color="teal">http</v-icon>
+                  </v-btn>
+                  <span>设置服务</span>
+                  </v-tooltip>
                 </td>
               </template>
           </v-data-table>
@@ -122,7 +164,10 @@
 <script>
 import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 export default {
+  components: { Treeselect },
   data() {
     return {
       fValid: true,
@@ -132,8 +177,11 @@ export default {
       roleQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
       roleView: {}, //查询详细数据对象
       loading: false,
+      setResDialog:false,
+      setSerDialog:false,
       title: "新增角色表",
       rules: Kit.inputRules,
+      treeData: [],
       roleHeaders: [
         {
           text: "角色名",
@@ -164,13 +212,34 @@ export default {
       totalRow: state => state.role.totalRow,
       pageNumber: state => state.role.pageNumber,
       pageSize: state => state.role.pageSize,
-      totalPage: state => state.role.totalPage
+      totalPage: state => state.role.totalPage,
+      
     })
   },
   mounted() {
     this.search();
   },
   methods: {
+    setRes(role){
+      let vm=this;
+      this.$store.dispatch('get_role',{id:role.id}).then(res=>{
+        vm.vo=Object.assign({},res)
+        this.$store.dispatch('get_res_tree_json',{pId:0}).then(listRes=>{
+          vm.treeData=listRes;
+        })
+      })
+      
+      vm.setResDialog=true;
+    },
+    saveRoleReses(){
+
+    },
+    setSer(role){
+
+    },
+    saveRoleSers(){
+
+    },
     search() {
       this.roleQuery['pn']=this.roleQuery.page;
       this.$store.dispatch("page_role", this.roleQuery);

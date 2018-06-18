@@ -91,10 +91,35 @@
                               <v-list-tile>
                                     <v-list-tile-content>创建时间:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.cAt | formatDate}}</v-list-tile-content>
                              </v-list-tile>
+                             <v-list-tile v-if="userView.userRoleNames!=''">
+                                    <v-list-tile-content>角色:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.userRoleNames!=undefined?userView.userRoleNames.join(','):'未设置'}}</v-list-tile-content>
+                             </v-list-tile>
                   </v-list>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="error darken-1" flat @click.native="viewDialog = false">关闭</v-btn>
+          </v-card-actions>
+        </v-card>
+  </v-dialog>
+  <v-dialog v-model="setRoleDialog" persistent max-width="500px">
+        <v-card >
+          <v-card-title>
+            <span class="headline">设置角色</span>
+          </v-card-title>
+            <v-divider></v-divider>
+                  <v-card-text>
+                    <v-container fluid>
+                      <v-layout row wrap>
+                        <v-flex xs12 sm3 md3 v-for="x in roleList" :key="x.id">
+                            <v-checkbox v-model="selectUser.userRoleCodes" :label="x.name" color="info" :value="x.code" hide-details ></v-checkbox>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="error darken-1" flat @click.native="setRoleDialog = false">关闭</v-btn>
+            <v-btn color="success darken-1" flat @click.native="saveUserRoles" :loading="loading" :disabled="loading">保存</v-btn>
           </v-card-actions>
         </v-card>
   </v-dialog>
@@ -168,6 +193,9 @@
                     <td>
                                {{props.item.cAt | formatDate}}
                     </td>
+                    <td>
+                               {{props.item.userRoleNames!=undefined?props.item.userRoleNames.join(','):'未设置'}}
+                    </td>
                 <td class=" layout px-0">
                   <v-btn icon class="mx-0" @click="edit(props.item)">
                     <v-icon color="teal">edit</v-icon>
@@ -178,6 +206,12 @@
                   <v-btn icon class="mx-0" @click="view(props.item)">
                       <v-icon color="teal">fas fa-eye</v-icon>
                   </v-btn>
+                  <v-tooltip bottom>
+                  <v-btn   slot="activator" icon class="mx-0" @click="setRole(props.item)">
+                      <v-icon color="teal">supervisor_account</v-icon>
+                  </v-btn>
+                  <span>设置角色</span>
+                  </v-tooltip>
                 </td>
               </template>
             </v-data-table>
@@ -196,6 +230,7 @@ export default {
       rowsPerPageItems: [15],
       userQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
       userView: {}, //查询详细数据对象
+      selectUser:{},
       loading: false,
       title: "新增用户信息表",
       rules: Kit.inputRules,
@@ -230,10 +265,16 @@ export default {
           sortable: true,
           value: "cAt"
         },
+        {
+          text: "角色",
+          sortable: false,
+          value: "userRoleNames"
+        },
         { text: "操作", sortable: false }
       ],
       dialog: false,
       viewDialog: false,
+      setRoleDialog:false,
       opt: "",
       userSelectData: [
         { text: "正常", value: "0" },
@@ -250,13 +291,36 @@ export default {
       totalRow: state => state.user.totalRow,
       pageNumber: state => state.user.pageNumber,
       pageSize: state => state.user.pageSize,
-      totalPage: state => state.user.totalPage
+      totalPage: state => state.user.totalPage,
+      roleList:state=>state.role.roleList
     })
   },
   mounted() {
     this.search();
   },
   methods: {
+    setRole(user){
+      let vm=this;
+      this.$store.dispatch('get_user',{id:user.id}).then(res=>{
+        vm.selectUser=Object.assign({},res);
+        vm.$store.dispatch('list_role');
+      })
+      this.setRoleDialog=true;
+    },
+    saveUserRoles(){
+      let data=this.selectUser.userRoleCodes;
+      if(!!data)data=data.join(',');
+      let param={loginname:this.selectUser.loginname,userRoleCodes:data}
+      let vm=this;
+      vm.loading=true
+      this.$store.dispatch('save_user_roles',param).then(res=>{
+        vm.loading=false;
+        if(res.resCode=='success'){
+          vm.setRoleDialog=false;
+          vm.search()
+        }
+      })
+    },
     search() {
       this.userQuery['pn']=this.userQuery.page;
       this.$store.dispatch("page_user", this.userQuery);

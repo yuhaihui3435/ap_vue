@@ -98,6 +98,17 @@ const user = {
         });
       })
     },
+    save_user_roles: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/user/saveUserRoles', param).then((res) => {
+          resolve(res)
+        });
+      })
+    },
   },
 
 }

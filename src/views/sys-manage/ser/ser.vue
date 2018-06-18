@@ -10,7 +10,7 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="ser.code"  label="编号" required :disabled="opt=='edit'"
+                              <v-text-field v-model="vo.code"  label="编号" required :disabled="opt=='edit'"
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -19,10 +19,10 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                                <v-select :items="serSelectData" v-model="ser.type" :rules="[rules.required]" label="类型" required item-value="value" item-text="text"></v-select>
+                                <v-select :items="serSelectData" v-model="vo.type" :rules="[rules.required]" label="类型" required item-value="value" item-text="text"></v-select>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="ser.name"  label="标题" required
+                              <v-text-field v-model="vo.name"  label="标题" required
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -31,10 +31,9 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="ser.url"  label="URL" required
+                              <v-text-field v-model="vo.url"  label="URL" required
                                   :rules="[
-                                  rules.required,
-                                  (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
+                                  (v) => !!!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
                                   ]"
                                   :counter="50">
                               </v-text-field>
@@ -77,28 +76,27 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
-          <v-btn slot="activator" color="blue" dark class="mb-2" @click.native="add()">新增<v-icon>add</v-icon></v-btn>
+    <v-container fluid grid-list-md >
+        <v-layout row wrap>
+        <v-flex xs12 sm6 md4>
+          <v-toolbar color="blue" >
+          <v-toolbar-title  class="white--text">服务树</v-toolbar-title>
+          <v-divider class="mx-3" inset vertical dark  ></v-divider>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+          <v-card > 
+            <treeselect ref="resTree" v-model="treeVal"   valueFormat="object" :noChildrenText="'没有子服务'" :noOptionsText="'没有数据'"  :placeholder="'请选择...'"  :options="treeData" />
+          </v-card>
+        </v-flex>
+        <v-flex xs12 sm6 md8>
+          <v-toolbar color="blue" >
+          <v-toolbar-title  class="white--text">服务列表</v-toolbar-title>
+          <v-divider class="mx-3" inset vertical dark  ></v-divider>
+          <v-spacer></v-spacer>
+          <v-btn  @click.native="add()" class="blue--text"   >新增子服务<v-icon>add</v-icon></v-btn>
+        </v-toolbar>
           <v-card >
-              <v-card-title>服务列表</v-card-title>
-              <v-container grid-list-md>
-                      <v-layout row wrap>
-                         <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="serQuery.code"  label="编号" single-line hide-details ></v-text-field>
-                         </v-flex>
-                         <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="serQuery.name"  label="标题" single-line hide-details ></v-text-field>
-                         </v-flex>
-                        <v-flex xs12 sm3 md3>
-                             <v-btn color="info" class="white--text" @click="search()">
-                                 搜索<v-icon>search</v-icon>
-                             </v-btn>
-                             <v-btn color="info" class="white--text" @click="clearQueryParam()">
-                                 清空<v-icon>clear</v-icon>
-                             </v-btn>
-                        </v-flex>
-                      </v-layout>
-              </v-container>
-            <v-data-table :headers="serHeaders" :total-items="totalRow" :items="serList" :rows-per-page-items="rowsPerPageItems" :pagination.sync="serQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
+            <v-data-table :headers="serHeaders" :total-items="totalRow" :hide-actions="totalRow==0" :items="serList" :rows-per-page-items="rowsPerPageItems" :pagination.sync="serQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
               <template slot="items" slot-scope="props">
                     <td>
                                {{props.item.code}}
@@ -126,12 +124,18 @@
               </template>
           </v-data-table>
           </v-card>
+          </v-flex>
+          </v-layout>
+       </v-container>
 </div>
 </template>
 <script>
 import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 export default {
+  components: { Treeselect },
   data() {
     return {
       fValid: true,
@@ -141,6 +145,10 @@ export default {
       serView: {}, //查询详细数据对象
       loading: false,
       title: "新增服务",
+      vo:{},
+      treeData: [],
+      treeVal: null,
+      treeRoot:{id:'',name:''},
       rules: Kit.inputRules,
       serHeaders: [
         {
@@ -182,40 +190,56 @@ export default {
     })
   },
   mounted() {
-    this.search();
+    this.getResTree();
   },
   methods: {
+    getResTree(){
+      this.$store.dispatch("get_ser_tree_json").then(res => {
+        this.treeData = res;
+        let d=this.treeData;
+        let vm=this;
+        this.$nextTick(function(){
+          vm.treeData=d;
+        })
+      });
+    },
     search() {
       this.serQuery["pn"] = this.serQuery.page;
       this.$store.dispatch("page_ser", this.serQuery);
     },
     add() {
+      let vm = this;
       this.loading = false;
+      let treeRoot = Object.assign({id:0,name:'根菜单'},this.treeVal);
       this.$refs.form.reset();
+      this.vo={};
       this.opt = "add";
-      this.$store.commit("setSer", {});
+      this.$nextTick(function(){
+        vm.treeRoot=treeRoot;
+      })
       this.title = "新增服务";
       this.dialog = true;
     },
     edit(ser) {
       this.loading = false;
-      this.$refs.form.reset();
       this.opt = "edit";
-      this.$store.commit("setSer", ser);
+      this.vo=Object.assign({},ser)
       this.dialog = true;
       this.title = "修改服务";
     },
     save() {
       let vm = this;
-      this.loading = true;
+      this.vo.pId=this.treeRoot.id;   
       if (this.$refs.form.validate()) {
+        vm.loading = true;
         this.$store
-          .dispatch("save_ser")
+          .dispatch("save_ser",vm.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
               vm.dialog = false;
               vm.search();
+              vm.getResTree();
             }
           })
           .catch(() => {
@@ -226,10 +250,11 @@ export default {
     },
     update(ser) {
       let vm = this;
-      this.loading = true;
+      
       if (this.$refs.form.validate()) {
+        vm.loading = true;
         this.$store
-          .dispatch("update_ser")
+          .dispatch("update_ser",vm.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -250,6 +275,7 @@ export default {
           vm.$store.dispatch("del_ser", { ids: ser.id }).then(res => {
             if (res.resCode == "success") {
               vm.search();
+              vm.getResTree();
             }
           });
         } else {
@@ -276,6 +302,18 @@ export default {
         }
       },
       deep: true
+    },
+    treeVal:{
+      handler(val,oldVal){
+        if(val==undefined){
+          this.serQuery.pId=0;
+          this.search();
+        }else if(oldVal==undefined||val.id!=oldVal.id){
+          this.serQuery.pId=val.id==undefined?0:val.id;
+          this.search();
+        }
+      },
+      deep:true
     }
   }
 };

@@ -60,16 +60,7 @@ export const appRouter = [{
   title: '系统管理',
   component:Main,
   meta:{title:'系统管理'},
-  children: [{
-      path: 'param',
-      title: '参数管理',
-      meta:{title:'参数管理'},
-      icon: "mouse",
-      name: 'sm_param',
-      component: resolve => {
-        require(['@/views/sys-manage/param/param.vue'], resolve);
-      }
-    },
+  children: [
     {
       path: 'user',
       title: '用户管理',
@@ -118,6 +109,16 @@ export const appRouter = [{
       name: 'sm_dd',
       component: resolve => {
         require(['@/views/sys-manage/dd/dd.vue'], resolve);
+      }
+    },
+    {
+      path: 'param',
+      title: '参数管理',
+      meta:{title:'参数管理'},
+      icon: "mouse",
+      name: 'sm_param',
+      component: resolve => {
+        require(['@/views/sys-manage/param/param.vue'], resolve);
       }
     },
   ]

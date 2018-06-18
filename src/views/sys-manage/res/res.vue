@@ -59,7 +59,7 @@
                                 <v-select :items="resSelectData" v-model="vo.logged" label="记录日志"  item-value="value" item-text="text"></v-select>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                                <v-select :items="resSelectData" v-model="vo.enabled" label="是否可用"  item-value="value" item-text="text"></v-select>
+                                <v-select :items="resSelectData" v-model="vo.enabled" :rules="[rules.required]" label="是否可用"  item-value="value" item-text="text"></v-select>
                            </v-flex>
                   </v-layout>
                 </v-container>
@@ -108,7 +108,7 @@
           </v-card-actions>
         </v-card>
         </v-dialog>
-       <v-container grid-list-md >
+       <v-container fluid grid-list-md >
         <v-layout row wrap>
         <v-flex xs12 sm6 md4>
           <v-toolbar color="blue" >
@@ -117,7 +117,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
           <v-card > 
-            <treeselect ref="resTree" v-model="treeVal" valueFormat="object" :noChildrenText="'没有子菜单'" :noOptionsText="'没有数据'" :load-options="loadOptions" :placeholder="'请选择...'"  :options="treeData" />
+            <treeselect ref="resTree" v-model="treeVal"   valueFormat="object" :noChildrenText="'没有子菜单'" :noOptionsText="'没有数据'"  :placeholder="'请选择...'"  :options="treeData" />
           </v-card>
         </v-flex>
         <v-flex xs12 sm6 md8>
@@ -128,7 +128,7 @@
           <v-btn  @click.native="add()" class="blue--text"   >新增子菜单<v-icon>add</v-icon></v-btn>
         </v-toolbar>
         <v-card > 
-              <v-container grid-list-md>
+              <!-- <v-container grid-list-md>
                       <v-layout row wrap>
                           <v-flex xs12 sm3 md3>
                             <v-text-field v-model="resQuery.code"  label="编号" single-line hide-details ></v-text-field>
@@ -148,8 +148,8 @@
                              </v-btn>
                         </v-flex>
                       </v-layout>
-              </v-container>
-            <v-data-table :headers="resHeaders" :total-items="totalRow" :items="resList" :rows-per-page-items="rowsPerPageItems" :pagination.sync="resQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
+              </v-container> -->
+            <v-data-table :headers="resHeaders" :total-items="totalRow" :items="resList" :hide-actions="totalRow==0"   :rows-per-page-items="rowsPerPageItems" :pagination.sync="resQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
               <template slot="items" slot-scope="props">
                     <td>
                                {{props.item.code}}
@@ -253,8 +253,8 @@ export default {
       dialog: false,
       viewDialog: false,
       opt: "",
-      resSelectData: [{ text: "是", value: "1" }, { text: "否", value: "0" }],
-      resSelectData: [{ text: "是", value: "1" }, { text: "否", value: "0" }]
+      resSelectData: [{ text: "是", value: "0" }, { text: "否", value: "1" }],
+      resSelectData: [{ text: "是", value: "0" }, { text: "否", value: "1" }]
     };
   },
   computed: {
@@ -268,22 +268,30 @@ export default {
     })
   },
   mounted() {
-    this.$store.dispatch("get_res_tree_json").then(res => {
-      this.treeData = res;
-    });
-
+    
+    this.getResTree()
     // this.resQuery['pn']=this.resQuery.page;
     // this.search();
   },
+  
   methods: {
-    loadOptions({ action, parentNode, callback }) {
-      let vm = this;
-      if (action === LOAD_CHILDREN_OPTIONS) {
-        let pId = parentNode.id;
-        vm.$store.dispatch();
-      }
+    
+    // treeSelectHandle(node,instanceId){
+    //   this.resQuery.pId=node.id;
+    //   this.search();
+    // },
+    getResTree(){
+      this.$store.dispatch("get_res_tree_json").then(res => {
+        this.treeData = res;
+        let d=this.treeData;
+        let vm=this;
+        this.$nextTick(function(){
+          vm.treeData=d;
+        })
+      });
     },
     search() {
+      
       this.$store.dispatch("page_res", this.resQuery);
     },
     add() {
@@ -291,6 +299,7 @@ export default {
       this.loading = false;
       let treeRoot = Object.assign({id:0,name:'根菜单'},this.treeVal);
       this.$refs.form.reset();
+      this.vo={};
       this.$nextTick(function(){
         vm.treeRoot=treeRoot;
       })
@@ -300,22 +309,24 @@ export default {
     },
     edit(res) {
       this.loading = false;
+      this.vo=Object.assign({},res)
       this.opt = "edit";
       this.dialog = true;
       this.title = "修改菜单";
     },
     save() {
       let vm = this;
-
+      this.vo.pId=this.treeRoot.id;
       if (this.$refs.form.validate()) {
-        this.loading = true;
+        vm.loading = true;
         this.$store
-          .dispatch("save_res", vo)
+          .dispatch("save_res", vm.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
               vm.dialog = false;
               vm.search();
+              vm.getResTree();
             }
           })
           .catch(() => {
@@ -328,9 +339,9 @@ export default {
       let vm = this;
 
       if (this.$refs.form.validate()) {
-        this.loading = true;
+        vm.loading = true;
         this.$store
-          .dispatch("update_res", vo)
+          .dispatch("update_res", vm.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -351,6 +362,7 @@ export default {
           vm.$store.dispatch("del_res", { ids: res.id }).then(res => {
             if (res.resCode == "success") {
               vm.search();
+              vm.getResTree();  
             }
           });
         } else {
@@ -381,7 +393,20 @@ export default {
         }
       },
       deep: true
+    },
+    treeVal:{
+      handler(val,oldVal){
+        if(val==undefined){
+          this.resQuery.pId=0;
+          this.search();
+        }else if(oldVal==undefined||val.id!=oldVal.id){
+          this.resQuery.pId=val.id==undefined?0:val.id;
+          this.search();
+        }
+      },
+      deep:true
     }
+
   }
 };
 </script>
