@@ -22,12 +22,26 @@ const store = new Vuex.Store({
     currMenuItem:'',
     snackbar:{show:false},
     loadingStatus:false,
+    tabsData:[],
   },
   mutations: {
     setBreadcrumbsList (state, obj) {
-      if(state.breadcrumbsList.length==2){
-        state.breadcrumbsList.pop();
+      if(state.breadcrumbsList.length==3||state.breadcrumbsList.length==2){
+        if(state.breadcrumbsList.length==3){
+          state.breadcrumbsList.pop();
+          state.breadcrumbsList.pop();
+        }else if(state.breadcrumbsList.length==2){
+          state.breadcrumbsList.pop();
+        }
+        
         if(obj.path!='/'&&obj.path!='/home'){
+          if(obj.meta.pTitle!=undefined){
+            state.breadcrumbsList.push({
+              text:obj.meta.pTitle,
+              disabled:true
+            })
+          }
+          
           state.breadcrumbsList.push({
             text:obj.meta.title,
             disabled:true
@@ -35,6 +49,12 @@ const store = new Vuex.Store({
         }
       }else{
         if(obj.path!='/'&&obj.path!='/home'){
+          if(obj.meta.pTitle!=undefined){
+            state.breadcrumbsList.push({
+              text:obj.meta.pTitle,
+              disabled:true
+            })
+          }
           state.breadcrumbsList.push({
             text:obj.meta.title,
             disabled:true
@@ -52,6 +72,18 @@ const store = new Vuex.Store({
     ,
     setLoadingStatus(state,bl){
       state.loadingStatus=bl
+    },
+    addTab(state,obj){
+      let b=false;
+      state.tabsData.forEach(element => {
+          if(obj.path!=undefined&&obj.path!='/'){
+              if(element.name==obj.name)
+                b=true;
+          }
+      });
+      if(!b){
+        state.tabsData.push(obj);
+      }
     }
   },
   actions: {

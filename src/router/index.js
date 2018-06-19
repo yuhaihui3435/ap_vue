@@ -64,7 +64,7 @@ export const appRouter = [{
     {
       path: 'user',
       title: '用户管理',
-      meta:{title:'用户管理'},
+      meta:{title:'用户管理',pTitle:'系统管理',icon: "person",},
       icon: "person",
       name: 'sm_user',
       component: resolve => {
@@ -74,7 +74,7 @@ export const appRouter = [{
     {
       path: 'role',
       title: '角色管理',
-      meta:{title:'角色管理'},
+      meta:{title:'角色管理',pTitle:'系统管理',icon: "group",},
       icon: "group",
       name: 'sm_role',
       component: resolve => {
@@ -84,7 +84,7 @@ export const appRouter = [{
     {
       path: 'res',
       title: '菜单管理',
-      meta:{title:'菜单管理'},
+      meta:{title:'菜单管理',pTitle:'系统管理',icon: "poll",},
       icon: "poll",
       name: 'sm_res',
       component: resolve => {
@@ -94,7 +94,7 @@ export const appRouter = [{
     {
       path: 'ser',
       title: '服务管理',
-      meta:{title:'服务管理'},
+      meta:{title:'服务管理',pTitle:'系统管理',icon: "http",},
       icon: "http",
       name: 'sm_ser',
       component: resolve => {
@@ -104,7 +104,7 @@ export const appRouter = [{
     {
       path: 'dd',
       title: '数据字典',
-      meta:{title:'数据字典'},
+      meta:{title:'数据字典',pTitle:'系统管理',icon: "local_library",},
       icon: "local_library",
       name: 'sm_dd',
       component: resolve => {
@@ -114,7 +114,7 @@ export const appRouter = [{
     {
       path: 'param',
       title: '参数管理',
-      meta:{title:'参数管理'},
+      meta:{title:'参数管理',pTitle:'系统管理',icon: "mouse",},
       icon: "mouse",
       name: 'sm_param',
       component: resolve => {
@@ -132,7 +132,7 @@ export const appRouter = [{
   children: [{
     path: 'genSource',
     title: '数据源',
-    meta:{title:'数据源'},
+    meta:{title:'数据源',pTitle:'代码管理',icon: "fas fa-database",},
     icon: "fas fa-database",
     name: 'gen_source',
     component: resolve => {

@@ -62,14 +62,14 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
-    <v-dialog v-model="setResDialog" persistent max-width="300px"  scrollable>
+    <v-dialog v-model="setResDialog" persistent max-width="500px"  scrollable>
         <v-card >
           <v-card-title>
             <span class="headline">设置菜单</span>
           </v-card-title>
             <v-divider></v-divider>
            <v-card-text  style="height:500px;overflow-y:true;">
-            <treeselect ref="resTree" v-model="vo.reses"  :value-consists-of="'ALL_WITH_INDETERMINATE'"  valueFormat="object" :noChildrenText="'没有子菜单'"   :noOptionsText="'没有数据'"  :placeholder="'请选择...'" :flat= :multiple="true"  :options="treeData" />    
+            <treeselect ref="resTree" v-model="vo.ownReses"  :limit="3" :limitText="(count)=>'还有'+count+'项'"  valueFormat="object" :disabled="treeData.length==0" :noChildrenText="'没有子菜单'"   :noOptionsText="'没有数据'"  :placeholder="'请选择...'" :flat="false" :multiple="true"  :options="treeData" />    
           </v-card-text>      
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -78,13 +78,15 @@
           </v-card-actions>
         </v-card>
     </v-dialog>
-    <v-dialog v-model="setSerDialog" persistent max-width="300px">
+    <v-dialog v-model="setSerDialog" persistent max-width="500px" scrollable>
         <v-card >
           <v-card-title>
             <span class="headline">设置服务</span>
           </v-card-title>
             <v-divider></v-divider>
-            <treeselect ref="serTree" v-model="vo.sers" :flat="true"  valueFormat="object"  :noChildrenText="'没有子服务'"  :noOptionsText="'没有数据'"  :placeholder="'请选择...'"  :multiple="true"  /> 
+            <v-card-text style="height:500px;overflow-y:true;">
+            <treeselect ref="serTree" v-model="vo.ownSers" :flat="false" :limit="3" :limitText="(count)=>'还有'+count+'项'" valueFormat="object"  :disabled="treeData.length==0" :noChildrenText="'没有子服务'"   :noOptionsText="'没有数据'"  :placeholder="'请选择...'"  :multiple="true"  :options="treeData"/> 
+            </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="error darken-1" flat @click.native="setSerDialog = false">关闭</v-btn>
@@ -93,7 +95,7 @@
         </v-card>
     </v-dialog>
           <v-toolbar color="blue" >
-          <v-toolbar-title  class="white--text">角色表列表</v-toolbar-title>
+          <v-toolbar-title  class="white--text">角色列表</v-toolbar-title>
           <v-divider class="mx-3" inset vertical dark  ></v-divider>
           <v-spacer></v-spacer>
           <v-btn  @click.native="add()" class="blue--text"   >新增<v-icon>add</v-icon></v-btn>
@@ -213,7 +215,6 @@ export default {
       pageNumber: state => state.role.pageNumber,
       pageSize: state => state.role.pageSize,
       totalPage: state => state.role.totalPage,
-      
     })
   },
   mounted() {
@@ -222,23 +223,67 @@ export default {
   methods: {
     setRes(role){
       let vm=this;
+      vm.loading=false;
+      vm.treeData=[]
+      vm.vo={};
       this.$store.dispatch('get_role',{id:role.id}).then(res=>{
-        vm.vo=Object.assign({},res)
         this.$store.dispatch('get_res_tree_json',{pId:0}).then(listRes=>{
-          vm.treeData=listRes;
+          listRes.forEach(function (value, key, map) {
+            vm.treeData.push(value)
+          })
+
+          vm.vo=Object.assign({},res)
         })
       })
-      
       vm.setResDialog=true;
     },
     saveRoleReses(){
-
+      let vm=this;
+      vm.loading=true;
+      let reses=this.vo.ownReses;
+      let resCodes=[];
+      reses.forEach(function(curr,index,array){
+        resCodes.push(curr.code);
+      })
+      let param={roleCode:this.vo.code,reses:resCodes.join(',')}
+      this.$store.dispatch('save_role_reses',param).then(res=>{
+        vm.loading=false;
+        if(res.resCode=='success'){
+          vm.setResDialog=false;
+        }
+      })
     },
     setSer(role){
-
+      let vm=this;
+      vm.loading=false;
+      vm.treeData=[]
+      vm.vo={};
+      this.$store.dispatch('get_role',{id:role.id}).then(res=>{
+        this.$store.dispatch('get_ser_tree_json',{pId:0}).then(listSer=>{
+          listSer.forEach(function (value, key, map) {
+            vm.treeData.push(value)
+          })
+          vm.vo=Object.assign({},res)
+        })
+      })
+      vm.setSerDialog=true;
     },
     saveRoleSers(){
-
+      let vm=this;
+      vm.loading=true;
+      let sers=this.vo.ownSers;
+      let serCodes=[];
+      sers.forEach(function(curr,index,array){
+        serCodes.push(curr.code);
+      })
+      let param={roleCode:this.vo.code,sers:serCodes.join(',')}
+      this.$store.dispatch('save_role_sers',param).then(res=>{
+        vm.loading=false;
+        if(res.resCode=='success'){
+          vm.setSerDialog=false;
+        }
+      })
+      
     },
     search() {
       this.roleQuery['pn']=this.roleQuery.page;

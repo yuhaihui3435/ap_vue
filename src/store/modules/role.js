@@ -92,6 +92,27 @@ const role = {
         });
       })
     },
+    save_role_reses: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/role/saveRoleReses', param).then((res) => {
+          resolve(res)
+        });
+      })
+    },save_role_sers: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/role/saveRoleSers', param).then((res) => {
+          resolve(res)
+        });
+      })
+    },
   },
 
 }

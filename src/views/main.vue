@@ -6,9 +6,17 @@
 									{{ item.text }}
 							</v-breadcrumbs-item>
         </v-breadcrumbs>
+        <v-tabs  color="grey lighten-3" fixed-tabs centered  show-arrows icons-and-text>
+          <v-tabs-slider color="blue"></v-tabs-slider>
+          <v-tab :exact="true" v-for="n in tabsData" :href="'#'+n.name" :key="n.name" :to="n.path"  ripple>{{ n.meta.title }}<v-icon>{{n.meta.icon}}</v-icon></v-tab>
+          <v-tabs-items >
+          <v-tab-item v-for="n in tabsData" :key="n.name" :id="n.name">
           <v-container fluid>
-            <router-view></router-view>
+            <router-view ></router-view>
           </v-container>
+          </v-tab-item>
+          </v-tabs-items>
+        </v-tabs>
     </div>
 </template>
 <script>
@@ -24,7 +32,8 @@ export default {
   computed: {
     ...mapState({
       breadcrumbsList:state=>state.breadcrumbsList,
-      loadingStatus:state=>state.loadingStatus
+      loadingStatus:state=>state.loadingStatus,
+      tabsData:state=>state.tabsData,
     }),
   },
   methods: {

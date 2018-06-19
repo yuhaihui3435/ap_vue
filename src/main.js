@@ -53,6 +53,9 @@ Vue.prototype.$http = http;
 
 router.beforeEach((to, from, next) => {
 
+
+  store.commit('addTab', to)
+
   //处理每个页面上面的面包屑 的数据
   store.commit('setBreadcrumbsList',to)
   //面包屑数据处理结束
