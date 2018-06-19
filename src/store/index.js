@@ -23,6 +23,7 @@ const store = new Vuex.Store({
     snackbar:{show:false},
     loadingStatus:false,
     tabsData:[],
+    tabActive:'home',
   },
   mutations: {
     setBreadcrumbsList (state, obj) {
@@ -84,6 +85,9 @@ const store = new Vuex.Store({
       if(!b){
         state.tabsData.push(obj);
       }
+    },
+    setTabActive(state,obj){
+      state.tabActive=obj;
     }
   },
   actions: {

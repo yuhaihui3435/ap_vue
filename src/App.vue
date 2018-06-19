@@ -43,7 +43,20 @@
     </v-toolbar>
     <v-content>
         <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear>
-				<router-view/>
+        <v-breadcrumbs>
+            <v-icon slot="divider">chevron_right</v-icon>
+							<v-breadcrumbs-item v-for="(item , i) in breadcrumbsList" :key="i" :disabled="item.disabled" @click="breadcrumbsClick(i)">
+									{{ item.text }}
+							</v-breadcrumbs-item>
+        </v-breadcrumbs>
+        <!-- <v-tabs v-model="tabActive" color="grey lighten-3" fixed-tabs centered  show-arrows icons-and-text> -->
+          <!-- <v-tabs-slider color="blue"></v-tabs-slider> -->
+          <!-- <v-tab  v-for="n in tabsData" :href="'#'+n.path" :key="n.path"  ripple>{{ n.meta.title }}<v-icon>{{n.meta.icon}}</v-icon></v-tab> -->
+          <!-- <v-tab-item v-for="n in tabsData" :key="n.path" :id="n.path"> -->
+            <router-view/>
+          <!-- </v-tab-item> -->
+        <!-- </v-tabs> -->
+				
     </v-content>
     <v-footer :fixed="fixed" app>
       <span>&copy; 2017</span>
@@ -72,6 +85,7 @@ const packageConfig = require('../package.json')
 export default {
   data() {
     return {
+      tabActive:'',
       clipped: true,
       drawer: true,
       fixed: false,
@@ -99,13 +113,20 @@ export default {
       currOpenedMenu:state=>state.currOpenedMenu,
       currMenuItem:state=>state.currMenuItem,
       snackbar:state=>state.snackbar,
-      loadingStatus:state=>state.loadingStatus
+      loadingStatus:state=>state.loadingStatus,
+      tabsData:state=>state.tabsData,
     }),
     // breadcrumbsList:function(){
     //   return JSON.parse(sessionStorage.getItem('breadcrumbsList'));
     // }
   },
   methods: {
+    //面包屑点击处理
+    breadcrumbsClick:function(i){
+      if(i==0){
+        this.$router.push("/")
+      }
+    },
     //右侧toolbar上的下来菜单的处理，
     mListClick(i) {
       if (i == 0) {
@@ -124,6 +145,7 @@ export default {
     },
     //左侧菜单点击处理，
     menuClick(pPath,path){
+      this.tabActive=pPath+'/'+path;
       let data={currOpenedMenu:pPath,currMenuItem:path};
       this.$store.commit('setCurrMenuState',data);
       sessionStorage.setItem('currMenuState',JSON.stringify(data))
