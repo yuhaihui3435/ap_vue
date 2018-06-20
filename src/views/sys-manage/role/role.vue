@@ -1,5 +1,5 @@
 <template>
-<div>
+<v-container>
   <v-dialog v-model="dialog" persistent max-width="500px">
       <v-card >
         <v-card-title>
@@ -161,7 +161,7 @@
                 <v-pagination v-model="roleQuery.pn" :length="totalPage"></v-pagination>
           </div> -->
           </v-card>
-</div>
+</v-container>
 </template>
 <script>
 import { mapState } from "vuex";

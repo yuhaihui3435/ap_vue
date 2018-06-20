@@ -1,4 +1,5 @@
 <template>
+<v-container>
   <v-card>
     <v-form v-model="valid">
          <v-tabs color="blue"  icons-and-text dark >
@@ -38,7 +39,7 @@
          <v-btn color="primary">刷新缓存</v-btn>
     </v-form>
   </v-card>
-    
+</v-container> 
 </template>
 <script>
 import { mapState } from "vuex";

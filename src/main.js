@@ -2,7 +2,9 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import {router} from './router'
+import {
+  router
+} from './router'
 import store from './store';
 import http from './libs/http';
 import {
@@ -16,8 +18,25 @@ import {
   VGrid,
   VToolbar,
   transitions,
-    VMenu,
-    VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker,Vpagination,VDivider,VCheckbox
+  VMenu,
+  VAvatar,
+  VBreadcrumbs,
+  VTabs,
+  VForm,
+  VTextField,
+  VCard,
+  VSnackbar,
+  VProgressLinear,
+  VDataTable,
+  VAlert,
+  VDialog,
+  VSwitch,
+  VSelect,
+  VTooltip,
+  VDatePicker,
+  Vpagination,
+  VDivider,
+  VCheckbox
 } from 'vuetify'
 import APDialog from './components/ap-confrim-dialog/index'
 import '../node_modules/vuetify/src/stylus/app.styl'
@@ -33,17 +52,34 @@ Vue.use(Vuetify, {
     VGrid,
     VToolbar,
     transitions,
-      VMenu,
-      VAvatar,VBreadcrumbs,VTabs,VForm,VTextField,VCard,VSnackbar,VProgressLinear,VDataTable,VAlert,VDialog,VSwitch,VSelect,VTooltip,VDatePicker,Vpagination,VDivider,VCheckbox
+    VMenu,
+    VAvatar,
+    VBreadcrumbs,
+    VTabs,
+    VForm,
+    VTextField,
+    VCard,
+    VSnackbar,
+    VProgressLinear,
+    VDataTable,
+    VAlert,
+    VDialog,
+    VSwitch,
+    VSelect,
+    VTooltip,
+    VDatePicker,
+    Vpagination,
+    VDivider,
+    VCheckbox
   },
   theme: {
     primary: "#2196F3",
-  secondary: "#64B5F6",
-  accent: "#FF3D00",
-  error: "#D50000",
-  warning: "#ffeb3b",
-  info: "#303F9F",
-  success: "#4CAF50"
+    secondary: "#64B5F6",
+    accent: "#FF3D00",
+    error: "#D50000",
+    warning: "#ffeb3b",
+    info: "#303F9F",
+    success: "#4CAF50"
   }
 })
 
@@ -53,14 +89,20 @@ Vue.prototype.$http = http;
 
 router.beforeEach((to, from, next) => {
 
+  let nickname = localStorage.getItem('nickname');
+  if(nickname&&to.path=='/login'){
+    next({path:'/'});
+  }
+  else if (!nickname&&to.path!='/login') {
+    next({path:'/login'});
+  } else {
+    // store.commit('addTab', to)
+    //处理每个页面上面的面包屑 的数据
+    store.commit('setBreadcrumbsList', to)
+    //面包屑数据处理结束
+    next()
+  }
 
-  store.commit('addTab', to)
-  store.commit('setTabActive',to.name);
-  //处理每个页面上面的面包屑 的数据
-  store.commit('setBreadcrumbsList',to)
-  //面包屑数据处理结束
-
-  next()
 });
 
 router.afterEach((to) => {
@@ -76,14 +118,12 @@ new Vue({
   data: {
     currentPageName: ''
   },
-  mounted () {
+  mounted() {
     this.currentPageName = this.$route.name;
     // 权限菜单过滤相关
     this.$store.commit('updateMenulist');
   },
-  created () {
+  created() {
 
   }
 })
-
-

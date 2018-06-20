@@ -1,7 +1,7 @@
 <template>
   <v-app>
     
-    <v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed app>
+    <!-- <v-navigation-drawer persistent :mini-variant="miniVariant" :clipped="clipped" v-model="drawer" enable-resize-watcher fixed app>
       <v-list>
         <v-list-group v-model="item.path == currOpenedMenu" v-for="(item, i) in menuList" :key="i" :prepend-icon="item.icon" no-action>
           <v-list-tile slot="activator">
@@ -40,15 +40,15 @@
           </v-list-tile>
         </v-list>
       </v-menu>
-    </v-toolbar>
-    <v-content>
-        <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear>
-        <v-breadcrumbs>
+    </v-toolbar> -->
+    <!-- <v-content> -->
+        <!-- <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear> -->
+        <!-- <v-breadcrumbs>
             <v-icon slot="divider">chevron_right</v-icon>
 							<v-breadcrumbs-item v-for="(item , i) in breadcrumbsList" :key="i" :disabled="item.disabled" @click="breadcrumbsClick(i)">
 									{{ item.text }}
 							</v-breadcrumbs-item>
-        </v-breadcrumbs>
+        </v-breadcrumbs> -->
         <!-- <v-tabs v-model="tabActive" color="grey lighten-3" fixed-tabs centered  show-arrows icons-and-text> -->
           <!-- <v-tabs-slider color="blue"></v-tabs-slider> -->
           <!-- <v-tab  v-for="n in tabsData" :href="'#'+n.path" :key="n.path"  ripple>{{ n.meta.title }}<v-icon>{{n.meta.icon}}</v-icon></v-tab> -->
@@ -57,10 +57,7 @@
           <!-- </v-tab-item> -->
         <!-- </v-tabs> -->
 				
-    </v-content>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
-    </v-footer>
+    
     <v-snackbar
       :timeout="snackbar.timeout"
       :top="snackbar.y === 'top'"
@@ -85,79 +82,77 @@ const packageConfig = require('../package.json')
 export default {
   data() {
     return {
-      tabActive:'',
-      clipped: true,
-      drawer: true,
-      fixed: false,
-      mList: [
-        {
-          title: "个人资料",
-          icon: "person",
-          color: "blue white--text"
-        },
-        {
-          title: "退出系统",
-          icon: "power_settings_new",
-          color: "blue white--text"
-        }
-      ],
-      miniVariant: false,
-      title:packageConfig.description,
+      // clipped: true,
+      // drawer: true,
+      // fixed: false,
+      // mList: [
+      //   {
+      //     title: "个人资料",
+      //     icon: "person",
+      //     color: "blue white--text"
+      //   },
+      //   {
+      //     title: "退出系统",
+      //     icon: "power_settings_new",
+      //     color: "blue white--text"
+      //   }
+      // ],
+      // miniVariant: false,
+      // title:packageConfig.description,
     };
   },
 
   computed: {
     ...mapState({
-      menuList: state => state.app.menuList,
-      breadcrumbsList:state=>state.breadcrumbsList,
-      currOpenedMenu:state=>state.currOpenedMenu,
-      currMenuItem:state=>state.currMenuItem,
+    //   menuList: state => state.app.menuList,
+    //   breadcrumbsList:state=>state.breadcrumbsList,
+    //   currOpenedMenu:state=>state.currOpenedMenu,
+    //   currMenuItem:state=>state.currMenuItem,
       snackbar:state=>state.snackbar,
-      loadingStatus:state=>state.loadingStatus,
-      tabsData:state=>state.tabsData,
+    //   loadingStatus:state=>state.loadingStatus,
+    //   tabsData:state=>state.tabsData,
     }),
     // breadcrumbsList:function(){
     //   return JSON.parse(sessionStorage.getItem('breadcrumbsList'));
     // }
   },
   methods: {
-    //面包屑点击处理
-    breadcrumbsClick:function(i){
-      if(i==0){
-        this.$router.push("/")
-      }
-    },
-    //右侧toolbar上的下来菜单的处理，
-    mListClick(i) {
-      if (i == 0) {
-        this.$router.push("/pc");
-      } else if (i == 1) {
+    // //面包屑点击处理
+    // breadcrumbsClick:function(i){
+    //   if(i==0){
+    //     this.$router.push("/")
+    //   }
+    // },
+    // //右侧toolbar上的下来菜单的处理，
+    // mListClick(i) {
+    //   if (i == 0) {
+    //     this.$router.push("/pc");
+    //   } else if (i == 1) {
 
-      }
-      sessionStorage.removeItem('setCurrMenuState')
-      this.$store.commit('setCurrMenuState',{});
-    },
-    //面包屑点击处理
-    breadcrumbsClick(i){
-      if(i==0){
-        this.$router.push("/")
-      }
-    },
-    //左侧菜单点击处理，
-    menuClick(pPath,path){
-      this.tabActive=pPath+'/'+path;
-      let data={currOpenedMenu:pPath,currMenuItem:path};
-      this.$store.commit('setCurrMenuState',data);
-      sessionStorage.setItem('currMenuState',JSON.stringify(data))
-      this.$router.push(pPath+'/'+path);
-    }
+    //   }
+    //   localStorage.removeItem('setCurrMenuState')
+    //   this.$store.commit('setCurrMenuState',{});
+    // },
+    // //面包屑点击处理
+    // breadcrumbsClick(i){
+    //   if(i==0){
+    //     this.$router.push("/")
+    //   }
+    // },
+    // //左侧菜单点击处理，
+    // menuClick(pPath,path){
+    //   let data={currOpenedMenu:pPath,currMenuItem:path};
+    //   this.$store.commit('setCurrMenuState',data);
+    //   localStorage.setItem('currMenuState',JSON.stringify(data))
+    //   this.$router.push(pPath+'/'+path);
+    // }
   },
   mounted(){
-    //恢复菜单前一次的展开状态
-    let currMenuState=sessionStorage.getItem('currMenuState');
-    if(currMenuState!=null){
-      this.$store.commit('setCurrMenuState',JSON.parse(currMenuState));
-    }
+    // //恢复菜单前一次的展开状态
+    // let currMenuState=localStorage.getItem('currMenuState');
+    // if(currMenuState!=null){
+    //   this.$store.commit('setCurrMenuState',JSON.parse(currMenuState));
+    // }
   },
   name: "App"
 };

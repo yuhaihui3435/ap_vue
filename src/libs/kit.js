@@ -1,6 +1,8 @@
 import store from '../store/index'
 import IDV from './IDValidator'
+let env=process.env.NODE_ENV;
 let kit = {
+  
   msg: {
 
   },
@@ -148,5 +150,6 @@ kit.msg.err = function (msg) {
   store.commit('setSnackbar', data);
 
 }
+kit.env=(env == 'development' ? '/api' : '');
 
 export default kit

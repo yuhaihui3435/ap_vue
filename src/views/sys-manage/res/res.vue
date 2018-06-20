@@ -127,29 +127,8 @@
           <v-spacer></v-spacer>
           <v-btn  @click.native="add()" class="blue--text"   >新增子菜单<v-icon>add</v-icon></v-btn>
         </v-toolbar>
-        <v-card > 
-              <!-- <v-container grid-list-md>
-                      <v-layout row wrap>
-                          <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="resQuery.code"  label="编号" single-line hide-details ></v-text-field>
-                         </v-flex>
-                         <v-flex xs12 sm3 md3>
-                            <v-text-field v-model="resQuery.name"  label="菜单名" single-line hide-details ></v-text-field>
-                         </v-flex>
-                        <v-flex xs12 sm3 md3>
-                            <v-select :items="resSelectData" v-model="resQuery.enabled" label="是否可用"  item-value="value" item-text="text"></v-select>
-                        </v-flex>
-                        <v-flex xs12 sm3 md3>
-                             <v-btn color="info" class="white--text" @click="search()">
-                                 搜索<v-icon>search</v-icon>
-                             </v-btn>
-                             <v-btn color="info" class="white--text" @click="clearQueryParam()">
-                                 清空<v-icon>clear</v-icon>
-                             </v-btn>
-                        </v-flex>
-                      </v-layout>
-              </v-container> -->
-            <v-data-table :headers="resHeaders" :total-items="totalRow" :items="resList" :hide-actions="totalRow==0"   :rows-per-page-items="rowsPerPageItems" :pagination.sync="resQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
+        
+        <v-data-table :headers="resHeaders" :total-items="totalRow" :items="resList" :hide-actions="totalRow==0"   :rows-per-page-items="rowsPerPageItems" :pagination.sync="resQuery"  class="elevation-1" no-data-text="数据为空" no-results-text="没有筛选到正确的数据">
               <template slot="items" slot-scope="props">
                     <td>
                                {{props.item.code}}
@@ -185,7 +164,7 @@
                 </td>
               </template>
           </v-data-table>
-          </v-card>
+          
           </v-flex>
           </v-layout>
        </v-container>

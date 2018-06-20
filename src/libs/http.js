@@ -71,10 +71,10 @@ ajaxMethod.forEach((method)=> {
             }).catch((response)=> {
                 if (response.status === 401) {
                     Kit.msg.err('身份失效或被禁用，请重新登录')
-                    //store.commit('logout')
-                    //router.push({
-                    //    path: "/login"
-                    //});
+                    store.commit('logout')
+                    router.push({
+                       path: "/login"
+                    });
                 }else if (response.status === 403) {
                     Kit.msg.err('您没有权限访问')
                 }

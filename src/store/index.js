@@ -23,7 +23,7 @@ const store = new Vuex.Store({
     snackbar:{show:false},
     loadingStatus:false,
     tabsData:[],
-    tabActive:'home',
+    nickname:'',
   },
   mutations: {
     setBreadcrumbsList (state, obj) {
@@ -86,12 +86,30 @@ const store = new Vuex.Store({
         state.tabsData.push(obj);
       }
     },
-    setTabActive(state,obj){
-      state.tabActive=obj;
+    logout(state){
+      localStorage.removeItem('currMenuState');
+      localStorage.removeItem('nickname')
+      localStorage.removeItem('resList')
+      localStorage.removeItem('serList')
+    },
+    setNickname(state,nickname){
+      state.nickname=nickname;
     }
   },
   actions: {
+    logout: function ({
+      commit,
+      state
+    }, param) {
 
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/login/logout', state.user).then((res) => {
+          commit('logout');
+          resolve(res);
+        });
+      })
+    },
   },
   modules: {
     app,
