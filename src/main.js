@@ -122,6 +122,11 @@ new Vue({
     this.currentPageName = this.$route.name;
     // 权限菜单过滤相关
     this.$store.commit('updateMenulist');
+    this.$store.commit('setNickname',localStorage.getItem('nickname'))
+    let avatar=localStorage.getItem('avatar');
+    if(!avatar)
+      avatar="../../static/none.png";
+    this.$store.commit('setAvatar',avatar)
   },
   created() {
 

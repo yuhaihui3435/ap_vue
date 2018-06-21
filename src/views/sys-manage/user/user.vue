@@ -309,7 +309,7 @@ export default {
     },
     saveUserRoles(){
       let data=this.selectUser.userRoleCodes;
-      if(!!data)data=data.join(',');
+      if(!!data&&data instanceof Array)data=data.join(',');
       let param={loginname:this.selectUser.loginname,userRoleCodes:data}
       let vm=this;
       vm.loading=true
@@ -323,7 +323,7 @@ export default {
     },
     search() {
       this.userQuery['pn']=this.userQuery.page;
-      this.$store.dispatch("page_user", this.userQuery);
+      this.$store.dispatch("page_user", this.userQuery).catch(res=>{});
     },
     add() {
       this.loading = false;
@@ -343,8 +343,9 @@ export default {
     },
     save() {
       let vm = this;
-      this.loading = true;
+      
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
           .dispatch("save_user")
           .then(res => {
@@ -354,7 +355,7 @@ export default {
               vm.search();
             }
           })
-          .catch(() => {
+          .catch((response) => {
             vm.loading = false;
             vm.dialog = false;
           });
@@ -362,8 +363,9 @@ export default {
     },
     update(user) {
       let vm = this;
-      this.loading = true;
+      
       if (this.$refs.form.validate()) {
+        this.loading = true;
         this.$store
           .dispatch("update_user")
           .then(res => {

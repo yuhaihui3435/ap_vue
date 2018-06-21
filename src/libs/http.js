@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store/index'
 import Kit from '../libs/kit'
 import qs from 'qs'
+import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 
 
 require('es6-promise').polyfill()
@@ -77,12 +78,15 @@ ajaxMethod.forEach((method)=> {
                     });
                 }else if (response.status === 403) {
                     Kit.msg.err('您没有权限访问')
+                    reject(response)
                 }
                 else if (response.status === 500) {
                     Kit.msg.err('服务器错误')
+                    reject(response)
                 }
                 else if (response.status === 404) {
                     Kit.msg.err('您访问的地址不存在')
+                    reject(response)
                 }
             })
         })

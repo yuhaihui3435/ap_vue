@@ -41,17 +41,27 @@ const user = {
       commit,
       state
     }, param) {
-      this._vm.$http.post('/api/user/list', param).then((res) => {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+      vm.$http.post('/api/user/list', param).then((res) => {
         commit('setUserList', res)
+      }).catch((res)=>{
+        reject(res)
       });
+    })
     },
     page_user: function ({
       commit,
       state
     }, param) {
-      this._vm.$http.post('/api/user/page', param).then((res) => {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+      vm.$http.post('/api/user/page', param).then((res) => {
         commit('setUserPage', res)
+      }).catch((res)=>{
+        reject(res)
       });
+    })
     },
     save_user: function ({
       commit,
@@ -61,6 +71,8 @@ const user = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/user/save', state.user).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
 
@@ -73,6 +85,8 @@ const user = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/user/update', state.user).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -84,6 +98,8 @@ const user = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/user/logicDel', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -95,6 +111,21 @@ const user = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/user/get', param).then((res) => {
           resolve( res)
+        }).catch((res)=>{
+          reject(res)
+        });
+      })
+    },
+    get_curr_user: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/user/getCurrUser', param).then((res) => {
+          resolve( res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -106,6 +137,8 @@ const user = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/user/saveUserRoles', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },

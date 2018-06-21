@@ -24,6 +24,7 @@ const store = new Vuex.Store({
     loadingStatus:false,
     tabsData:[],
     nickname:'',
+    avatar:'',
   },
   mutations: {
     setBreadcrumbsList (state, obj) {
@@ -94,6 +95,9 @@ const store = new Vuex.Store({
     },
     setNickname(state,nickname){
       state.nickname=nickname;
+    },
+    setAvatar(state,avatar){
+      state.avatar=avatar;
     }
   },
   actions: {

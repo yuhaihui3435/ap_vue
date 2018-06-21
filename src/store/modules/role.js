@@ -55,6 +55,8 @@ const role = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/role/save',param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
 
@@ -67,6 +69,8 @@ const role = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/role/update', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -78,6 +82,8 @@ const role = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/role/logicDel', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -89,6 +95,8 @@ const role = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/role/get', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -100,6 +108,8 @@ const role = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/role/saveRoleReses', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },save_role_sers: function ({
@@ -110,6 +120,8 @@ const role = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/role/saveRoleSers', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },

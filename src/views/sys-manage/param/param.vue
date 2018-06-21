@@ -36,7 +36,7 @@
             
          </v-tabs>
          <v-btn color="primary"  @click="save" :loading="loading" :disabled="loading" >保存</v-btn>
-         <v-btn color="primary">刷新缓存</v-btn>
+         <!-- <v-btn color="primary">刷新缓存</v-btn> -->
     </v-form>
   </v-card>
 </v-container> 

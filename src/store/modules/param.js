@@ -24,6 +24,8 @@ const param = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/param/save', state.param).then((res) => {
             resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
 

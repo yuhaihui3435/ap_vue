@@ -61,6 +61,8 @@ const res = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/res/save', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
 
@@ -73,6 +75,8 @@ const res = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/res/update', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },
@@ -84,6 +88,8 @@ const res = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/res/logicDel', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },
@@ -95,6 +101,8 @@ const res = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/res/get', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },
@@ -106,6 +114,8 @@ const res = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/res/getTreeJson', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },

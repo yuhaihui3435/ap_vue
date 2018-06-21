@@ -73,10 +73,13 @@ export default {
             let resData=JSON.parse(res.resData);
              vm.$store.commit('setNickname',resData.nickname);
             localStorage.setItem("nickname", resData.nickname);
-            if (res.resList != undefined)
+            if (resData.resList != undefined)
               localStorage.setItem("resList", JSON.stringify(resData.resList));
-            if (res.serList != undefined)
+            if (resData.serList != undefined)
               localStorage.setItem("serList", JSON.stringify(resData.serList));
+
+            // 权限菜单过滤相关
+            this.$store.commit('updateMenulist');
             vm.$router.push({
               path: "/"
             });

@@ -28,29 +28,38 @@ const app = {
   },
   mutations: {
     updateMenulist (state) {
-      let ma = Cookies.get('menuArray');
+      let resList = localStorage.getItem('resList');
       let menuList = [];
-      if(ma!=undefined)ma= eval ("(" + ma+ ")")
-
+      if(resList!=undefined)resList=JSON.parse(resList)
       appRouter.forEach((item, index) => {
-        // if(ma&&Kit.oneOf(item.path,ma)) {
-          if (item.children.length === 1) {
-            menuList.push(item);
-          } else {
-            let len = menuList.push(item);
-            let childrenArr = [];
+        let childrenArr = [];
+        
+          // if(resList&&Kit.oneOf(cItem.path,resList)) {
             childrenArr = item.children.filter(child => {
               if (child.path !== undefined) {
-                // if (Kit.oneOf(item.path+'/'+child.path, ma)) {
+                if (Kit.oneOf(item.path+'/'+child.path, resList)) {
                   return child;
-                // }
+                }
               }
             });
-            let handledItem = JSON.parse(JSON.stringify(menuList[len - 1]));
-            handledItem.children = childrenArr;
-            menuList.splice(len - 1, 1, handledItem);
-          }
-        // }
+          // }
+        
+        if(childrenArr.length>0){
+            let handledItem=Object.assign({},item)
+            handledItem.children=childrenArr;
+            menuList.push(handledItem);
+        }
+        // if(resList&&Kit.oneOf(item.path,resList)) {
+        //   if (item.children.length === 1) {
+        //     menuList.push(item);
+        //   } else {
+        //     let len = menuList.push(item);
+            
+        //     let handledItem = JSON.parse(JSON.stringify(menuList[len - 1]));
+        //     handledItem.children = childrenArr;
+        //     menuList.splice(len - 1, 1, handledItem);
+        //   }
+        // // }
       });
       state.menuList = menuList;
     },

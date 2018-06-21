@@ -233,7 +233,7 @@ export default {
       viewDialog: false,
       opt: "",
       resSelectData: [{ text: "是", value: "0" }, { text: "否", value: "1" }],
-      resSelectData: [{ text: "是", value: "0" }, { text: "否", value: "1" }]
+      
     };
   },
   computed: {

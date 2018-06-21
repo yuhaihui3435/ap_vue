@@ -38,6 +38,9 @@
                                   :counter="50">
                               </v-text-field>
                            </v-flex>
+                           <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
+                                <v-select :items="enabledSelectData" v-model="vo.enabled" :rules="[rules.required]" label="是否可用"  item-value="value" item-text="text"></v-select>
+                           </v-flex>
                   </v-layout>
                 </v-container>
             </v-form>
@@ -110,6 +113,9 @@
                     <td>
                                {{props.item.url}}
                     </td>
+                    <td>
+                               {{props.item.enabledStr}}
+                    </td>
                 <td class=" layout px-0">
                   <v-btn icon class="mx-0" @click="edit(props.item)">
                     <v-icon color="teal">edit</v-icon>
@@ -171,12 +177,18 @@ export default {
           sortable: false,
           value: "url"
         },
+        {
+          text: "是否可用",
+          sortable: false,
+          value: "enabled"
+        },
         { text: "操作", sortable: false }
       ],
       dialog: false,
       viewDialog: false,
       opt: "",
-      serSelectData: [{ text: "服务", value: "0" }]
+      serSelectData: [{ text: "服务", value: "0" }],
+      enabledSelectData: [{ text: "是", value: "0" }, { text: "否", value: "1" }]
     };
   },
   computed: {

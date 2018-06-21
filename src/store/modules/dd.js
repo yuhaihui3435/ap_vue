@@ -32,6 +32,8 @@ const dd = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/dd/save', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
   
@@ -44,6 +46,8 @@ const dd = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/dd/update', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },
@@ -55,6 +59,8 @@ const dd = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/dd/del', param).then((res) => {
               resolve(res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },
@@ -66,6 +72,8 @@ const dd = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/dd/get', param).then((res) => {
               commit('setDd',res)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       },
@@ -77,6 +85,8 @@ const dd = {
         return new Promise(function (resolve, reject) {
           vm.$http.post('/api/dd/get', param).then((res) => {
               commit('setDdChildren',res.children)
+          }).catch((res)=>{
+            reject(res)
           });
         })
       }

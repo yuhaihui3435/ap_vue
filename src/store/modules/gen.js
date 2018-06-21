@@ -57,6 +57,8 @@ const gen = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/genSource/save', state.genSource).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -68,6 +70,8 @@ const gen = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/genSource/update', state.genSource).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -79,6 +83,8 @@ const gen = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/genSource/del', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -99,6 +105,8 @@ const gen = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/gen/syncLocal', param).then((res) => {
             resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -110,6 +118,8 @@ const gen = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/gen/saveColConfig', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     },
@@ -121,6 +131,8 @@ const gen = {
       return new Promise(function (resolve, reject) {
         vm.$http.post('/api/gen/genCode', param).then((res) => {
           resolve(res)
+        }).catch((res)=>{
+          reject(res)
         });
       })
     }

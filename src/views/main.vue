@@ -26,8 +26,8 @@
       <strong>{{nickname}}</strong>
       <v-menu offset-y>
         <v-btn slot="activator" large icon dark color="indigo">
-          <v-avatar>
-            <v-icon>account_circle</v-icon>
+          <v-avatar size="48px">
+            <img :src="avatar">
           </v-avatar>
         </v-btn>
         <v-list>
@@ -94,6 +94,7 @@ export default {
       loadingStatus: state => state.loadingStatus,
       tabsData: state => state.tabsData,
       nickname:state=>state.nickname,
+      avatar:state=>state.avatar,
     })
   },
   methods: {
