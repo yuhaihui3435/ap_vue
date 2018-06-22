@@ -29,6 +29,7 @@ const app = {
   mutations: {
     updateMenulist (state) {
       let resList = localStorage.getItem('resList');
+      if(resList==null)return;
       let menuList = [];
       if(resList!=undefined)resList=JSON.parse(resList)
       appRouter.forEach((item, index) => {

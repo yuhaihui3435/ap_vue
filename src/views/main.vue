@@ -41,10 +41,30 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-        <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear>
+        <!-- <v-progress-linear :indeterminate="loadingStatus" :active="loadingStatus"  style="margin: 5px 0;"></v-progress-linear> -->
+    <v-dialog
+      v-model="loadingStatus"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          数据通信中......
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+      </v-dialog>
         <v-breadcrumbs>
             <v-icon slot="divider">chevron_right</v-icon>
-							<v-breadcrumbs-item v-for="(item , i) in breadcrumbsList" :key="i" :disabled="item.disabled" @click="breadcrumbsClick(i)">
+							<v-breadcrumbs-item v-for="(item , i) in breadcrumbsList" :key="i" :to="i==0?'/':''" :disabled="item.disabled" >
 									{{ item.text }}
 							</v-breadcrumbs-item>
         </v-breadcrumbs>
@@ -98,12 +118,7 @@ export default {
     })
   },
   methods: {
-    //面包屑点击处理
-    breadcrumbsClick: function(i) {
-      if (i == 0) {
-        this.$router.push("/");
-      }
-    },
+    
     //右侧toolbar上的下来菜单的处理，
     mListClick(i) {
       let vm=this;
@@ -117,6 +132,7 @@ export default {
         });
       }
       this.$store.commit("setCurrMenuState", {});
+      localStorage.removeItem('currMenuState');
     },
     //面包屑点击处理
     breadcrumbsClick(i) {
@@ -133,11 +149,7 @@ export default {
     }
   },
   mounted() {
-    //恢复菜单前一次的展开状态
-    let currMenuState = localStorage.getItem("currMenuState");
-    if (currMenuState != null) {
-      this.$store.commit("setCurrMenuState", JSON.parse(currMenuState));
-    }
+    
   },
   name: "Main"
 };

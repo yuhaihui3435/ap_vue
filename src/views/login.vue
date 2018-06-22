@@ -71,8 +71,12 @@ export default {
           if (res.resCode&&res.resCode == "success") {
            
             let resData=JSON.parse(res.resData);
-             vm.$store.commit('setNickname',resData.nickname);
+            vm.$store.commit('setNickname',resData.nickname);
             localStorage.setItem("nickname", resData.nickname);
+            vm.$store.commit('setLastLogin',{lastLoginTime:resData.lastLoginTime,lastLoginIp:resData.lastLoginIp});
+            localStorage.setItem('lastLogin',JSON.stringify({lastLoginTime:resData.lastLoginTime,lastLoginIp:resData.lastLoginIp}));
+
+
             if (resData.resList != undefined)
               localStorage.setItem("resList", JSON.stringify(resData.resList));
             if (resData.serList != undefined)

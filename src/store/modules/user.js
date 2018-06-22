@@ -69,7 +69,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/save', state.user).then((res) => {
+        vm.$http.post('/api/user/save', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -83,7 +83,20 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/update', state.user).then((res) => {
+        vm.$http.post('/api/user/update', param).then((res) => {
+          resolve(res)
+        }).catch((res)=>{
+          reject(res)
+        });
+      })
+    },
+    update_pwd: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/api/user/updatePwd', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)

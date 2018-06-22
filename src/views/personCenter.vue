@@ -1,7 +1,7 @@
 <template>
     <v-container>
   <v-card>
-    <v-form >
+    
          <v-tabs color="blue"  icons-and-text dark >
              
              <v-tab   href="#tab-2">
@@ -16,77 +16,114 @@
              <v-tab-item id="tab-2">
                <v-container fluid>
                   <v-flex md4 sm6 xs8 >
-                    <v-text-field v-model="user.loginname"  label="登录用户名" disabled  ></v-text-field>
-                    <v-text-field v-model="user.nickname"  label="昵称"  ></v-text-field>
-                    <v-text-field v-model="user.phone" label="电话"  ></v-text-field>
-                    <v-text-field v-model="user.email" label="EMAIL"  ></v-text-field>
-                    
-                    <!-- <v-flex md4 sm6 xs8 > -->
+                    <v-form v-model="fValid" ref="form" lazy-validation>
+                      <v-text-field v-model="user.loginname"  label="登录用户名" disabled  ></v-text-field>
+                      <v-text-field v-model="user.nickname"  label="昵称"  :rules="[
+                                  rules.required,
+                                  (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
+                                  ]"
+                                  :counter="50"></v-text-field>
+                      <v-text-field v-model="user.phone" label="电话"  :rules="[
+                                  rules.required,
+                                  rules.phone,
+                                  (v) => !!v||(v!=undefined&&v.length <= 20) || '最多 20 字符',
+                                  ]"
+                                  :counter="20"></v-text-field>
+                      <v-text-field v-model="user.email" label="EMAIL"  :rules="[
+                                  rules.email,
+                                  (v)=>!!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
+                                  (v)=>!!!v||(v!=undefined&&v.length >= 6)|| '最少 6 字符',
+                                  ]"
+                                  :counter="100"></v-text-field>
+                      <v-text-field v-model="user.statusStr" label="状态"  disabled></v-text-field>
+                      <v-avatar size="68px">
+                        <img :src="user.avatar=='undefiend'?imgUrl:user.avatar">
+                      </v-avatar>
+                      <vue-core-image-upload
+                        class=""
+                        :inputOfFile="'file'"
+                        :crop="false"
+                        :text="'上传头像'"
+                        @imagechanged="imagechanged"
+                        @imageuploaded="imageuploaded"
+                        @errorhandle="errorhandle"
+                        @imageuploading="imageuploading"
+                        :max-file-size="imgMaxSize"
+                        :url="uploadUrl" 
+                        :isXhr="false"
+                        >
+                      </vue-core-image-upload>
                       
-                        <!-- <file-upload  v-if="env=='/api'"
-                        extensions="gif,jpg,jpeg,png,"
-                        accept="image/png,image/gif,image/jpeg"
-                        name="file"
-                        v-model="files"
-                        post-action="/api/cmn/act01"
-                        @input-filter="inputFilter"
-                        @input-file="inputFile"
-                        ref="upload">
-                        上传头像
-                        <v-avatar size="68px" color="grey lighten-4" >
-                            <img :src="files.length ? files[0].url : '../../static/none.png'" >
-                        </v-avatar>
-                    </file-upload> -->
-                    <!-- <file-upload  v-if="env==''"
-                        extensions="gif,jpg,jpeg,png,"
-                        accept="image/png,image/gif,image/jpeg"
-                        name="file"
-                        v-model="files"
-                        post-action="/cmn/act01"
-                        @input-filter="inputFilter"
-                        @input-file="inputFile"
-                        ref="upload">
-                        上传头像1
-                        <v-avatar size="68px" color="grey lighten-4" >
-                            <img :src="files.length ? files[0].url : '../../static/none.png'" >
-                        </v-avatar>
-                    </file-upload> -->
-                    <v-text-field v-model="user.statusStr" label="状态"  disabled></v-text-field>
-                    
-                  <!-- </v-flex> -->
-                    <v-btn color="primary"  @click="saveUserInfo" :loading="loading" :disabled="loading" >保存</v-btn>
+                      <v-btn color="primary"  @click="saveUserInfo" :loading="loading||uploadLoading" :disabled="loading" >保存</v-btn>
+                    </v-form>
                   </v-flex>
                </v-container>
              </v-tab-item>
              <v-tab-item id="tab-4">
               <v-container fluid>
                   <v-flex md4 sm6 xs8 >
-                    <v-text-field v-model="pwd.oldPassword"  label="旧密码"  ></v-text-field>
-                    <v-text-field v-model="pwd.newPassword" label="新密码"  ></v-text-field>
-                    <v-text-field v-model="pwd.rePassword" label="新密码确认"  ></v-text-field>
+                    <v-form v-model="fValid" ref="form1" lazy-validation>
+                    <v-text-field v-model="pwd.oldPassword"  label="旧密码"  :append-icon="oldPwd ? 'visibility_off' : 'visibility'" :type="oldPwd ? 'text' : 'password'" @click:append="oldPwd = !oldPwd" :rules="[
+                                  rules.required,
+                                  ]" >
+                    </v-text-field>
+                    <v-text-field :id="'newPwd'"  v-model="pwd.newPassword" label="新密码" :append-icon="newPwd ? 'visibility_off' : 'visibility'" :type="newPwd ? 'text' : 'password'" @click:append="newPwd = !newPwd"  :rules="[
+                                  rules.required,
+                                  (v)=>!!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
+                                  (v)=>!!!v||(v!=undefined&&v.length >= 6)|| '最少 6 字符',
+                                  ]"
+                                  :counter="100"></v-text-field>
+                    <v-text-field :id="'reNewPwd'"  v-model="pwd.rePassword" label="新密码确认" :append-icon="reNewPwd ? 'visibility_off' : 'visibility'" :type="reNewPwd ? 'text' : 'password'" @click:append="reNewPwd = !reNewPwd"  :rules="[
+                                  rules.required,
+                                  (v)=>!!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
+                                  (v)=>!!!v||(v!=undefined&&v.length >= 6)|| '最少 6 字符',
+                                  checkPwd
+                                  ]"
+                                  :counter="100"></v-text-field>
                     <v-btn color="primary"  @click="savePwd" :loading="loading" :disabled="loading" >保存</v-btn>
+                    </v-form>
                   </v-flex>
                </v-container>
              </v-tab-item>
          </v-tabs>
-    </v-form>
+    
   </v-card>
-</v-container> 
+  
+</v-container>
+
 </template>
 <script>
-import FileUpload from "vue-upload-component";
+import VueCoreImageUpload from 'vue-core-image-upload'
 import Kit from "../libs/kit.js";
 export default {
   components: {
-    FileUpload
+    'vue-core-image-upload': VueCoreImageUpload,
   },
   data() {
     return {
+      oldPwd:false,
+      newPwd:false,
+      reNewPwd:false,
+      fValid:true,
+      uploadLoading:false,
       user: {},
       pwd:{},
       loading: false,
-      files: [],
+      rules: Kit.inputRules,
+      checkPwd:function(val){
+        
+        let newPwd=document.getElementById('newPwd');
+        let reNewPwd=document.getElementById('reNewPwd');
+        
+        if(newPwd==undefined&&reNewPwd==undefined)return '';
+        newPwd=newPwd.value;
+        reNewPwd=reNewPwd.value;
+        return (newPwd===reNewPwd)||'两次输入的密码不一致'
+      },
       env:Kit.env,
+      imgUrl: '../../static/none.png',
+      uploadUrl:Kit.env==''?'/cmn/act01':'/api/cmn/act01',
+      imgMaxSize:52428
     };
   },
   computed: {},
@@ -95,6 +132,7 @@ export default {
       .dispatch("get_curr_user")
       .then(res => {
         this.user = res;
+        localStorage.setItem('avatar',res.avatar);
       })
       .catch(res => {
         this.loading = false;
@@ -103,35 +141,61 @@ export default {
 
   methods: {
     saveUserInfo() {
-        
-        
-    },
-    savePwd() {},
-    inputFile: function (newFile, oldFile) {
-      if (newFile && oldFile && !newFile.active && oldFile.active) {
-        // Get response data
-        console.log('response', newFile.response)
-        if (newFile.xhr) {
-          //  Get the response status code
-          console.log('status', newFile.xhr.status)
-        }
+      let vm = this;
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        this.$store
+          .dispatch("update_user",vm.user)
+          .then(res => {
+            vm.loading = false;
+            if (res.resCode == "success") {
+              vm.$store.commit('setAvatar',vm.user.avatar)
+              localStorage.setItem('avatar',vm.user.avatar)
+            }
+          })
+          .catch((response) => {
+            vm.loading = false;
+          });
       }
     },
-    inputFilter(newFile, oldFile, prevent) {
-      if (newFile && !oldFile) {
-        if (!/\.(gif|jpg|jpeg|png)$/i.test(newFile.name)) {
-          Kit.msg.err("请选择一张图片");
-          return prevent();
-        }
+    savePwd() {
+      let vm = this;
+      if (this.$refs.form1.validate()) {
+        this.loading = true;
+        this.$store
+          .dispatch("update_pwd",vm.pwd)
+          .then(res => {
+            vm.loading = false;
+            if (res.resCode == "success") {
+              
+            }
+          })
+          .catch((response) => {
+            vm.loading = false;
+          });
       }
-      if (newFile && (!oldFile || newFile.file !== oldFile.file)) {
-        newFile.url = "";
-        let URL = window.URL || window.webkitURL;
-        if (URL && URL.createObjectURL) {
-          newFile.url = URL.createObjectURL(newFile.file);
+    },
+    imageuploaded(res) {
+      this.uploadLoading=false;
+     
+    },
+    errorhandle(res){
+       this.uploadLoading=false;
+        if(res.indexOf('FILE IS TOO LARGER MAX FILE IS')>-1){
+          Kit.msg.err('上传图片大小不能超过'+parseInt(this.imgMaxSize/1024)+'k')
         }
-      }
-      
+    },
+    imageuploading(){
+      this.uploadLoading=true;
+    },
+    imagechanged(file){
+      let vm=this;
+      var reader = new FileReader(); 
+      reader.readAsDataURL(file); 
+      reader.onload = function(e){ 
+        vm.imgUrl=this.result
+        vm.user.avatar=this.result
+      } 
     }
   }
 };

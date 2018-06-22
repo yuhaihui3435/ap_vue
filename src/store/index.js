@@ -25,6 +25,8 @@ const store = new Vuex.Store({
     tabsData:[],
     nickname:'',
     avatar:'',
+    lastLoginTime:'',
+    lastLoginIp:''
   },
   mutations: {
     setBreadcrumbsList (state, obj) {
@@ -98,6 +100,10 @@ const store = new Vuex.Store({
     },
     setAvatar(state,avatar){
       state.avatar=avatar;
+    },
+    setLastLogin(state,obj){
+      state.lastLoginIp=obj.lastLoginIp
+      state.lastLoginTime=obj.lastLoginTime
     }
   },
   actions: {

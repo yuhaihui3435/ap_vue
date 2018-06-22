@@ -70,6 +70,9 @@
           </v-card-title>
             <v-divider></v-divider>
                   <v-list dense>
+                             <v-list-tile>
+                                    <v-list-tile-content>头像:</v-list-tile-content><v-list-tile-content class="align-end"><v-avatar size="38px"><img :src="userView.avatar?userView.avatar:'../../../../static/none.png'"></v-avatar></v-list-tile-content>
+                              </v-list-tile>
                               <v-list-tile>
                                     <v-list-tile-content>登录账号:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.loginname}}</v-list-tile-content>
                              </v-list-tile>
@@ -82,9 +85,7 @@
                               <v-list-tile>
                                     <v-list-tile-content>邮件:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.email}}</v-list-tile-content>
                              </v-list-tile>
-                              <v-list-tile>
-                                    <v-list-tile-content>头像:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.avatar}}</v-list-tile-content>
-                             </v-list-tile>
+                              
                               <v-list-tile>
                                     <v-list-tile-content>状态:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.statusStr}}</v-list-tile-content>
                              </v-list-tile>
@@ -207,6 +208,12 @@
                       <v-icon color="teal">fas fa-eye</v-icon>
                   </v-btn>
                   <v-tooltip bottom>
+                  <v-btn icon class="mx-0" @click="resetPwd(props.item)">
+                      <v-icon color="teal">redo</v-icon>
+                  </v-btn>
+                  <span>重置密码</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
                   <v-btn   slot="activator" icon class="mx-0" @click="setRole(props.item)">
                       <v-icon color="teal">supervisor_account</v-icon>
                   </v-btn>
@@ -227,6 +234,7 @@ export default {
     return {
       fValid: true,
       valid: true,
+      vo:{},
       rowsPerPageItems: [15],
       userQuery: { pn: 1, sortBy: "", descending: "" }, //列表查询参数数据对象
       userView: {}, //查询详细数据对象
@@ -329,7 +337,6 @@ export default {
       this.loading = false;
       this.$refs.form.reset();
       this.opt = "add";
-      this.$store.commit("setUser", {});
       this.title = "新增用户信息表";
       this.dialog = true;
     },
@@ -337,7 +344,7 @@ export default {
       this.loading = false;
       // this.$refs.form.reset();
       this.opt = "edit";
-      this.$store.commit("setUser", user);
+      this.vo=Object.assign({},user)
       this.dialog = true;
       this.title = "修改用户信息表";
     },
@@ -347,7 +354,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.$store
-          .dispatch("save_user")
+          .dispatch("save_user",vm.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -367,7 +374,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         this.$store
-          .dispatch("update_user")
+          .dispatch("update_user",vm.vo)
           .then(res => {
             vm.loading = false;
             if (res.resCode == "success") {
@@ -409,6 +416,9 @@ export default {
       this.userQuery["status"] = "";
       this.userQuery["beginCAt"] = "";
       this.userQuery["endCAt"] = "";
+    },
+    resetPwd(item){
+
     }
   },
   filters: {
