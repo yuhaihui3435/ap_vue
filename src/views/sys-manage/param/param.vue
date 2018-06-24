@@ -3,7 +3,10 @@
   <v-card>
     <v-form v-model="valid">
          <v-tabs color="blue"  icons-and-text dark >
-             
+             <v-tab   href="#tab-1">
+                基础设置
+                <v-icon>build</v-icon>
+             </v-tab>
              <v-tab   href="#tab-2">
                 图片储存服务设置
                 <v-icon>image</v-icon>
@@ -12,7 +15,17 @@
                 短信服务设置
                 <v-icon>sms</v-icon>
              </v-tab>
-            
+            <v-tab-item id="tab-1">
+              <v-container fluid>
+                <v-flex md4 sm6 xs8>
+                  登录策略
+                  <v-radio-group v-model="param.userOnlineTactics" :mandatory="'loginFirst'" >
+                    <v-radio label="先登录为主" value="loginFirst"></v-radio>
+                    <v-radio label="后登录为主" value="afterLoggingIn"></v-radio>
+                  </v-radio-group>
+                </v-flex>
+              </v-container>
+            </v-tab-item>
              <v-tab-item id="tab-2">
                <v-container fluid>
                   <v-flex md4 sm6 xs8 >
@@ -64,6 +77,8 @@ export default {
     save(){
       this.loading=true;
       this.$store.dispatch('save_param').then(()=>{
+        this.loading=false;
+      }).catch(res=>{
         this.loading=false;
       });
     }

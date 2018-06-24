@@ -3,7 +3,6 @@
   <v-card>
     
          <v-tabs color="blue"  icons-and-text dark >
-             
              <v-tab   href="#tab-2">
                 个人资料
                 <v-icon>person</v-icon>

@@ -94,6 +94,8 @@ const store = new Vuex.Store({
       localStorage.removeItem('nickname')
       localStorage.removeItem('resList')
       localStorage.removeItem('serList')
+      localStorage.removeItem('avatar')
+      localStorage.removeItem('lastLogin')
     },
     setNickname(state,nickname){
       state.nickname=nickname;

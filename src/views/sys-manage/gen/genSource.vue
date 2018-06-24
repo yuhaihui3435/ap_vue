@@ -11,25 +11,25 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.name"  label="数据源名"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.name"  label="数据源名"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.remark"  label="数据源说明"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.remark"  label="数据源说明"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.url"  label="数据源URL"   :rules="[rules.required,(v) => !!v&&v.length <= 200 || '最多 200 字符']" :counter="200"></v-text-field>
+                        <v-text-field v-model="vo.url"  label="数据源URL"   :rules="[rules.required,(v) => !!v&&v.length <= 200 || '最多 200 字符']" :counter="200"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.user"  label="数据源用户名"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.user"  label="数据源用户名"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.pwd"  label="数据源密码"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
+                        <v-text-field v-model="vo.pwd"  label="数据源密码"  :rules="[rules.required,(v) => !!v&&v.length <= 50 || '最多 50 字符']" :counter="50"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                          <v-select :items="dialectList" v-model="genSource.dialect" label="数据源方言" single-line></v-select>
+                          <v-select :items="dialectList" v-model="vo.dialect" label="数据源方言" single-line></v-select>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.basePackage"  label="基础包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
+                        <v-text-field v-model="vo.basePackage"  label="基础包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex>
                       <!-- <v-flex xs12 sm6 md4>
                         <v-text-field v-model="genSource.baseModelPackageName"  label="数据模型基础包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
@@ -38,10 +38,10 @@
                         <v-text-field v-model="genSource.modelPackageName"  label="数据模型包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex> -->
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.removePrefix"  label="移除前缀（|分割）"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
+                        <v-text-field v-model="vo.removePrefix"  label="移除前缀（|分割）"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="genSource.excludedTable"  label="排除表名(|分割)"  :rules="[(v) => !!!v||v.length <= 1000 || '最多 1000 字符']" :counter="1000"></v-text-field>
+                        <v-text-field v-model="vo.excludedTable"  label="排除表名(|分割)"  :rules="[(v) => !!!v||v.length <= 1000 || '最多 1000 字符']" :counter="1000"></v-text-field>
                       </v-flex>
                   </v-layout>
                 </v-container>
@@ -117,6 +117,7 @@ export default {
       dialogTitle: "新增数据源",
       genSourceListTitle: "数据源列表",
       rules: Kit.inputRules,
+      vo:{},
       headers: [
         { text: "数据源名", align: "left", value: "name" },
         { text: "数据源说明", value: "remark" },
@@ -155,7 +156,7 @@ export default {
       this.loading = true;
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("save_genSource")
+          .dispatch("save_genSource",vm.vo)
           .then(res => {
             this.loading = false;
             if (res.resCode == "success") {
@@ -170,7 +171,7 @@ export default {
       }
     },
     toAdd() {
-      this.$store.commit('setGenSource',{});
+      
       this.$refs.form.reset();
       this.opt = "add";
       this.dialogTitle = "新增数据源";
@@ -178,8 +179,8 @@ export default {
       this.loading = false;
     },
     toEdit(genSource) {
-      this.$refs.form.reset();
-      this.$store.commit('setGenSource',genSource);
+      // this.$refs.form.reset();
+      this.vo=Object.assign({},genSource)
       this.opt = "update";
       this.dialog = true;
       this.dialogTitle = "修改数据源";
@@ -190,7 +191,7 @@ export default {
       this.loading = true;
       if (this.$refs.form.validate()) {
         this.$store
-          .dispatch("update_genSource")
+          .dispatch("update_genSource",vm.vo)
           .then(res => {
             this.loading = false;
             if (res.resCode == "success") {

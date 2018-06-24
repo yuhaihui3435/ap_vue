@@ -43,7 +43,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-      vm.$http.post('/api/user/list', param).then((res) => {
+      vm.$http.post('/user/list', param).then((res) => {
         commit('setUserList', res)
       }).catch((res)=>{
         reject(res)
@@ -56,7 +56,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-      vm.$http.post('/api/user/page', param).then((res) => {
+      vm.$http.post('/user/page', param).then((res) => {
         commit('setUserPage', res)
       }).catch((res)=>{
         reject(res)
@@ -69,7 +69,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/save', param).then((res) => {
+        vm.$http.post('/user/save', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -83,7 +83,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/update', param).then((res) => {
+        vm.$http.post('/user/update', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -96,7 +96,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/updatePwd', param).then((res) => {
+        vm.$http.post('/user/updatePwd', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -109,7 +109,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/logicDel', param).then((res) => {
+        vm.$http.post('/user/logicDel', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -122,7 +122,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/get', param).then((res) => {
+        vm.$http.post('/user/get', param).then((res) => {
           resolve( res)
         }).catch((res)=>{
           reject(res)
@@ -135,7 +135,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/getCurrUser', param).then((res) => {
+        vm.$http.post('/user/getCurrUser', param).then((res) => {
           resolve( res)
         }).catch((res)=>{
           reject(res)
@@ -148,7 +148,7 @@ const user = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/user/saveUserRoles', param).then((res) => {
+        vm.$http.post('/user/saveUserRoles', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)

@@ -10,7 +10,7 @@
                 <v-container grid-list-md>
                   <v-layout wrap>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.loginname"  label="登录账号" 
+                              <v-text-field v-model="vo.loginname"  label="登录账号" 
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -20,7 +20,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.nickname"  label="昵称" 
+                              <v-text-field v-model="vo.nickname"  label="昵称" 
                                   :rules="[
                                   rules.required,
                                   (v) => !!v||(v!=undefined&&v.length <= 50) || '最多 50 字符',
@@ -29,7 +29,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.phone"  label="电话号" 
+                              <v-text-field v-model="vo.phone"  label="电话号" 
                                   :rules="[
                                   rules.required,
                                   rules.phone,
@@ -39,7 +39,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='add'||opt=='edit'">
-                              <v-text-field v-model="user.email"  label="邮件" 
+                              <v-text-field v-model="vo.email"  label="邮件" 
                                   :rules="[
                                   rules.email,
                                   (v)=>!!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符',
@@ -49,7 +49,7 @@
                               </v-text-field>
                            </v-flex>
                            <v-flex xs12 sm6 md4 v-show="opt=='edit'||opt=='add'">
-                                <v-select :items="userSelectData" v-model="user.status" required label="状态" :rules="[rules.required]" item-value="value"  item-text="text"></v-select>
+                                <v-select :items="userSelectData" v-model="vo.status" required label="状态" :rules="[rules.required]" item-value="value"  item-text="text"></v-select>
                            </v-flex>
                   </v-layout>
                 </v-container>

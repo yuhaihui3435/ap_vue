@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../store/index'
 import Kit from '../libs/kit'
 import qs from 'qs'
-import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
+import {router} from '../router'
 
 
 require('es6-promise').polyfill()
@@ -87,6 +87,13 @@ ajaxMethod.forEach((method)=> {
                 else if (response.status === 404) {
                     Kit.msg.err('您访问的地址不存在')
                     reject(response)
+                }
+                else if (response.status === 900) {
+                    Kit.msg.err('您的账户正在其他地方进行登录操作')
+                    store.commit('logout')
+                    router.push({
+                       path: "/login"
+                    });
                 }
             })
         })

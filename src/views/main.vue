@@ -149,7 +149,22 @@ export default {
     }
   },
   mounted() {
-    
+    // 权限菜单过滤相关
+    this.$store.commit('updateMenulist');
+    this.$store.commit('setNickname',localStorage.getItem('nickname'))
+    let avatar=localStorage.getItem('avatar');
+    if(!avatar)
+      avatar="../../static/none.png";
+    this.$store.commit('setAvatar',avatar)
+    //恢复菜单前一次的展开状态
+    let currMenuState = localStorage.getItem("currMenuState");
+    if (currMenuState != null) {
+      this.$store.commit("setCurrMenuState", JSON.parse(currMenuState));
+    }
+    let lastLogin=localStorage.getItem("lastLogin");
+    if(lastLogin!=null){
+      this.$store.commit('setLastLogin',JSON.parse(lastLogin));
+    }
   },
   name: "Main"
 };

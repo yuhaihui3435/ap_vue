@@ -75,7 +75,8 @@ export default {
             localStorage.setItem("nickname", resData.nickname);
             vm.$store.commit('setLastLogin',{lastLoginTime:resData.lastLoginTime,lastLoginIp:resData.lastLoginIp});
             localStorage.setItem('lastLogin',JSON.stringify({lastLoginTime:resData.lastLoginTime,lastLoginIp:resData.lastLoginIp}));
-
+            localStorage.setItem('avatar',resData.avatar)
+            vm.$store.commit('setAvatar',resData.avatar)
 
             if (resData.resList != undefined)
               localStorage.setItem("resList", JSON.stringify(resData.resList));

@@ -53,7 +53,7 @@
                                     <v-list-tile-content>编号:</v-list-tile-content><v-list-tile-content class="align-end">{{roleView.code}}</v-list-tile-content>
                              </v-list-tile>
                               <v-list-tile>
-                                    <v-list-tile-content>创建时间:</v-list-tile-content><v-list-tile-content class="align-end">{{roleView.cAt}}</v-list-tile-content>
+                                    <v-list-tile-content>创建时间:</v-list-tile-content><v-list-tile-content class="align-end">{{roleView.cAt | formatDate}}</v-list-tile-content>
                              </v-list-tile>
                   </v-list>
           <v-card-actions>
@@ -130,7 +130,7 @@
                                {{props.item.code}}
                     </td>
                     <td>
-                               {{props.item.cAt}}
+                               {{props.item.cAt | formatDate}}
                     </td>
                 <td class=" layout px-0">
                   <v-btn icon class="mx-0" @click="edit(props.item)">
@@ -168,6 +168,7 @@ import { mapState } from "vuex";
 import Kit from "../../../libs/kit.js";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+var moment = require("moment");
 export default {
   components: { Treeselect },
   data() {
@@ -364,6 +365,13 @@ export default {
     clearQueryParam() {
       this.roleQuery["name"] = "";
       this.roleQuery["code"] = "";
+    }
+  },
+  filters: {
+    formatDate(time) {
+      if (!!!time) return "";
+      var date = new Date(time);
+      return moment(date).format("YYYY-MM-DD hh:mm:ss");
     }
   },
   watch: {

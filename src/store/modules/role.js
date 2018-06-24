@@ -35,7 +35,7 @@ const role = {
       commit,
       state
     }, param) {
-      this._vm.$http.post('/api/role/list', param).then((res) => {
+      this._vm.$http.post('/role/list', param).then((res) => {
         commit('setRoleList', res)
       });
     },
@@ -43,7 +43,7 @@ const role = {
       commit,
       state
     }, param) {
-      this._vm.$http.post('/api/role/page', param).then((res) => {
+      this._vm.$http.post('/role/page', param).then((res) => {
         commit('setRolePage', res)
       });
     },
@@ -53,7 +53,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/save',param).then((res) => {
+        vm.$http.post('/role/save',param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -67,7 +67,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/update', param).then((res) => {
+        vm.$http.post('/role/update', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -80,7 +80,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/logicDel', param).then((res) => {
+        vm.$http.post('/role/logicDel', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -93,7 +93,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/get', param).then((res) => {
+        vm.$http.post('/role/get', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -106,7 +106,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/saveRoleReses', param).then((res) => {
+        vm.$http.post('/role/saveRoleReses', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -118,7 +118,7 @@ const role = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/role/saveRoleSers', param).then((res) => {
+        vm.$http.post('/role/saveRoleSers', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)

@@ -20,7 +20,7 @@ const dd = {
         commit,
         state
       }, param) {
-        this._vm.$http.get('/api/dd/list').then((res) => {
+        this._vm.$http.get('/dd/list').then((res) => {
           commit('setDdList', res)
         });
       },
@@ -30,7 +30,7 @@ const dd = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/save', param).then((res) => {
+          vm.$http.post('/dd/save', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -44,7 +44,7 @@ const dd = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/update', param).then((res) => {
+          vm.$http.post('/dd/update', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -57,7 +57,7 @@ const dd = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/del', param).then((res) => {
+          vm.$http.post('/dd/del', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -70,7 +70,7 @@ const dd = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/get', param).then((res) => {
+          vm.$http.post('/dd/get', param).then((res) => {
               commit('setDd',res)
           }).catch((res)=>{
             reject(res)
@@ -83,7 +83,7 @@ const dd = {
       }, param) {
         let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/dd/get', param).then((res) => {
+          vm.$http.post('/dd/get', param).then((res) => {
               commit('setDdChildren',res.children)
           }).catch((res)=>{
             reject(res)

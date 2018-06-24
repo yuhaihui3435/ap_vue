@@ -41,7 +41,7 @@ const res = {
         commit,
         state
       }, param) {
-        this._vm.$http.post('/api/res/list',param).then((res) => {
+        this._vm.$http.post('/res/list',param).then((res) => {
           commit('setResList', res)
         });
       },
@@ -49,7 +49,7 @@ const res = {
               commit,
               state
       }, param) {
-         this._vm.$http.post('/api/res/page',param).then((res) => {
+         this._vm.$http.post('/res/page',param).then((res) => {
             commit('setResPage', res)
          });
       },
@@ -59,7 +59,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/save', param).then((res) => {
+          vm.$http.post('/res/save', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -73,7 +73,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/update', param).then((res) => {
+          vm.$http.post('/res/update', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -86,7 +86,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/logicDel', param).then((res) => {
+          vm.$http.post('/res/logicDel', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -99,7 +99,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/get', param).then((res) => {
+          vm.$http.post('/res/get', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)
@@ -112,7 +112,7 @@ const res = {
       }, param) {
           let vm=this._vm;
         return new Promise(function (resolve, reject) {
-          vm.$http.post('/api/res/getTreeJson', param).then((res) => {
+          vm.$http.post('/res/getTreeJson', param).then((res) => {
               resolve(res)
           }).catch((res)=>{
             reject(res)

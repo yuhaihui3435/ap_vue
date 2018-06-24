@@ -12,7 +12,7 @@ const param = {
       commit,
       state
     }, param) {
-      this._vm.$http.get('/api/param/json').then((res) => {
+      this._vm.$http.get('/param/json').then((res) => {
         commit('setParam', res)
       });
     },
@@ -22,7 +22,7 @@ const param = {
     }, param) {
         let vm=this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/param/save', state.param).then((res) => {
+        vm.$http.post('/param/save', state.param).then((res) => {
             resolve(res)
         }).catch((res)=>{
           reject(res)

@@ -28,7 +28,7 @@ const gen = {
       commit,
       state
     }, param) {
-      this._vm.$http.post('/api/gen/list_table', param).then((res) => {
+      this._vm.$http.post('/gen/list_table', param).then((res) => {
         commit('setTableMetasList', res)
       });
     },
@@ -37,7 +37,7 @@ const gen = {
       commit,
       state
     }, param) {
-      this._vm.$http.get('/api/gen/list_table_column', param).then((res) => {
+      this._vm.$http.get('/gen/list_table_column', param).then((res) => {
         commit('setColumnMetasList', res)
       });
     },
@@ -45,7 +45,7 @@ const gen = {
       commit,
       state
     }, param) {
-      this._vm.$http.get('/api/genSource/page', param).then((res) => {
+      this._vm.$http.get('/genSource/page', param).then((res) => {
         commit('setGenSourcePage', res)
       });
     },
@@ -55,7 +55,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/genSource/save', state.genSource).then((res) => {
+        vm.$http.post('/genSource/save', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -68,7 +68,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/genSource/update', state.genSource).then((res) => {
+        vm.$http.post('/genSource/update', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -81,7 +81,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/genSource/del', param).then((res) => {
+        vm.$http.post('/genSource/del', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -93,7 +93,7 @@ const gen = {
       state
     }, param) {
       let vm = this._vm;
-      vm.$http.post('/api/genSource/get', param).then((res) => {
+      vm.$http.post('/genSource/get', param).then((res) => {
         commit('setGenSource', res)
       });
     },
@@ -103,7 +103,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/gen/syncLocal', param).then((res) => {
+        vm.$http.post('/gen/syncLocal', param).then((res) => {
             resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -116,7 +116,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/gen/saveColConfig', param).then((res) => {
+        vm.$http.post('/gen/saveColConfig', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
@@ -129,7 +129,7 @@ const gen = {
     }, param) {
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
-        vm.$http.post('/api/gen/genCode', param).then((res) => {
+        vm.$http.post('/gen/genCode', param).then((res) => {
           resolve(res)
         }).catch((res)=>{
           reject(res)
