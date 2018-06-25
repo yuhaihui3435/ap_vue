@@ -28,6 +28,7 @@ axiosIns.defaults.transformRequest = [function (data) {
 
         return data;
     }
+    
     return qs.stringify(data);
 }
 ];

@@ -274,7 +274,18 @@ export default {
 
       this.$APDialog.confirm(function(ret) {
         if (ret) {
-          vm.$store.dispatch("gen_code", param).then(res => {});
+          vm.$store.dispatch("gen_code", param).then(res => {
+            if(res.resCode=='success'){
+              let data=res.resData;
+              data=JSON.parse(data);
+              data.forEach(element => {
+                 element.forEach(ele=>{
+                   let url=Kit.env+'/cmn/act05?codePath='+ele;
+                   window.open(url,'_blank')
+                 })
+              });
+            }
+          });
         } else {
         }
       });
@@ -285,7 +296,18 @@ export default {
 
       this.$APDialog.confirm(function(ret) {
         if (ret) {
-          vm.$store.dispatch("gen_code", param).then(res => {});
+          vm.$store.dispatch("gen_code", param).then(res => {
+            if(res.resCode=='success'){
+              let data=res.resData;
+              data=JSON.parse(data);
+              data.forEach(element => {
+                 element.forEach(ele=>{
+                   let url=Kit.env+'/cmn/act05?codePath='+ele;
+                   window.open(url,'_blank')
+                 })
+              });
+            }
+          });
         } else {
         }
       });
@@ -296,7 +318,18 @@ export default {
 
       this.$APDialog.confirm(function(ret) {
         if (ret) {
-          vm.$store.dispatch("gen_code", param).then(res => {});
+          vm.$store.dispatch("gen_code", param).then(res => {
+            if(res.resCode=='success'){
+              let data=res.resData;
+              data=JSON.parse(data);
+              data.forEach(element => {
+                 element.forEach(ele=>{
+                   let url=Kit.env+'/cmn/act05?codePath='+ele;
+                   window.open(url,'_blank')
+                 })
+              });
+            }
+          });
         } else {
         }
       });

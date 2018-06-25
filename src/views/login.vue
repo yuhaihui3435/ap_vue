@@ -27,7 +27,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :loading="loading" @click="login">登录<v-icon right dark>fas fa-sign-in-alt</v-icon></v-btn>
+                <v-btn color="primary" :loading="loading||!fValid" @click="login">登录<v-icon right dark>fas fa-sign-in-alt</v-icon></v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>

@@ -4,7 +4,8 @@ const gen = {
     tableMetasList: [],
     columnMetasList: [],
     genSource: {},
-    genSourcePage: {}
+    genSourcePage: {},
+    projectTemplates:[],
   },
   mutations: {
     setTableMeta(state, obj) {
@@ -21,6 +22,9 @@ const gen = {
     },
     setGenSourcePage(state, page) {
       state.genSourcePage = page;
+    },
+    setProjectTemplates(state, list) {
+      state.projectTemplates = list;
     }
   },
   actions: {
@@ -136,6 +140,35 @@ const gen = {
         });
       })
     }
+    ,
+    query_gen_project_templates: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/gen/getProjectTemplates', param).then((res) => {
+          commit('setProjectTemplates',res)
+          resolve(res)
+        }).catch((res)=>{
+          reject(res)
+        });
+      })
+    },
+    gen_project: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/gen/genProject', param).then((res) => {
+          resolve(res)
+        }).catch((res)=>{
+          reject(res)
+        });
+      })
+    }
+    ,
   },
 
 }

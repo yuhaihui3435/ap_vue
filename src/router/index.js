@@ -139,6 +139,16 @@ export const appRouter = [{
       require(['@/views/sys-manage/gen/genSource.vue'], resolve);
     }
   },
+  {
+    path: 'genProject',
+    title: '基础项目生成',
+    meta:{title:'基础项目生成',pTitle:'代码管理',icon: "touch_app",},
+    icon: "touch_app",
+    name: 'gen_project',
+    component: resolve => {
+      require(['@/views/sys-manage/gen/genProject.vue'], resolve);
+    }
+  },
   
   ]
 }
