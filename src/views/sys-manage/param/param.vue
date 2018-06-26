@@ -19,7 +19,7 @@
               <v-container fluid>
                 <v-flex md4 sm6 xs8>
                   登录策略
-                  <v-radio-group v-model="param.userOnlineTactics" :mandatory="'loginFirst'" >
+                  <v-radio-group v-model="param.userOnlineTactics" :mandatory="false" >
                     <v-radio label="先登录为主" value="loginFirst"></v-radio>
                     <v-radio label="后登录为主" value="afterLoggingIn"></v-radio>
                   </v-radio-group>

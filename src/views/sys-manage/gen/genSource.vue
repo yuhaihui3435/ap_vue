@@ -38,10 +38,10 @@
                         <v-text-field v-model="genSource.modelPackageName"  label="数据模型包"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex> -->
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="vo.removePrefix"  label="移除前缀（|分割）"  :rules="[rules.required,(v) => !!v&&v.length <= 100 || '最多 100 字符']" :counter="100"></v-text-field>
+                        <v-text-field v-model="vo.removePrefix"  label="移除前缀（|分割）"  :rules="[(v) => !!!v||(v!=undefined&&v.length <= 100) || '最多 100 字符']" :counter="100"></v-text-field>
                       </v-flex>
                       <v-flex xs12 sm6 md4>
-                        <v-text-field v-model="vo.excludedTable"  label="排除表名(|分割)"  :rules="[(v) => !!!v||v.length <= 1000 || '最多 1000 字符']" :counter="1000"></v-text-field>
+                        <v-text-field v-model="vo.excludedTable"  label="排除表名(|分割)"  :rules="[(v) => !!!v||(v!=undefined&&v.length <= 100) || '最多 1000 字符']" :counter="1000"></v-text-field>
                       </v-flex>
                   </v-layout>
                 </v-container>
@@ -152,6 +152,7 @@ export default {
       this.$store.dispatch("query_genSource_page");
     },
     save() {
+      
       let vm = this;
       this.loading = true;
       if (this.$refs.form.validate()) {

@@ -24,6 +24,7 @@ const gen = {
       state.genSourcePage = page;
     },
     setProjectTemplates(state, list) {
+      
       state.projectTemplates = list;
     }
   },
@@ -145,6 +146,7 @@ const gen = {
       commit,
       state
     }, param) {
+      commit('setProjectTemplates',[]);
       let vm = this._vm;
       return new Promise(function (resolve, reject) {
         vm.$http.post('/gen/getProjectTemplates', param).then((res) => {
