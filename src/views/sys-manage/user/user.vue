@@ -208,7 +208,7 @@
                       <v-icon color="teal">fas fa-eye</v-icon>
                   </v-btn>
                   <v-tooltip bottom>
-                  <v-btn icon class="mx-0" @click="resetPwd(props.item)">
+                  <v-btn   slot="activator" icon class="mx-0" @click="resetPwd(props.item)">
                       <v-icon color="teal">redo</v-icon>
                   </v-btn>
                   <span>重置密码</span>
@@ -218,6 +218,12 @@
                       <v-icon color="teal">supervisor_account</v-icon>
                   </v-btn>
                   <span>设置角色</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                  <v-btn   slot="activator" icon class="mx-0" @click="kickOff(props.item)">
+                      <v-icon color="teal">exit_to_app</v-icon>
+                  </v-btn>
+                  <span>强制退出在线账户</span>
                   </v-tooltip>
                 </td>
               </template>
@@ -418,7 +424,30 @@ export default {
       this.userQuery["endCAt"] = "";
     },
     resetPwd(item){
-
+      let vm = this;
+      this.$APDialog.confirm(function(ret) {
+        if (ret) {
+          vm.$store.dispatch("reset_user_pwd", { userId: item.id }).then(res => {
+            if (res.resCode == "success") {
+              vm.$APDialog.alert('新密码为:'+res.resData);
+            }
+          });
+        } else {
+        }
+      });
+    },
+    kickOff(item){
+      let vm = this;
+      this.$APDialog.confirm(function(ret) {
+        if (ret) {
+          vm.$store.dispatch("kickoff_user", { userId: item.id }).then(res => {
+            if (res.resCode == "success") {
+              
+            }
+          });
+        } else {
+        }
+      });
     }
   },
   filters: {

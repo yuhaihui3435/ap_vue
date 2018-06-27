@@ -155,6 +155,32 @@ const user = {
         });
       })
     },
+    reset_user_pwd: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/user/resetPwd', param).then((res) => {
+          resolve(res)
+        }).catch((res)=>{
+          reject(res)
+        });
+      })
+    },
+    kickoff_user: function ({
+      commit,
+      state
+    }, param) {
+      let vm = this._vm;
+      return new Promise(function (resolve, reject) {
+        vm.$http.post('/login/kickOffOnlineUser', param).then((res) => {
+          resolve(res)
+        }).catch((res)=>{
+          reject(res)
+        });
+      })
+    },
   },
 
 }

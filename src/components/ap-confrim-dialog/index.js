@@ -33,7 +33,7 @@ const Confirm = function (callback, message) {
 
 }
 
-const Alert = function (callback, message) {
+const Alert = function ( message,callback) {
   let config = {
     msg: message,
     btns: [{label:'确认',action:function () {
