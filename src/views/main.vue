@@ -153,8 +153,9 @@ export default {
     this.$store.commit('updateMenulist');
     this.$store.commit('setNickname',localStorage.getItem('nickname'))
     let avatar=localStorage.getItem('avatar');
-    if(!avatar)
+    if(avatar==undefined||avatar=="undefined"){
       avatar="../../static/none.png";
+    }
     this.$store.commit('setAvatar',avatar)
     //恢复菜单前一次的展开状态
     let currMenuState = localStorage.getItem("currMenuState");
