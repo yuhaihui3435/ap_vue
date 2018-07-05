@@ -150,6 +150,6 @@ kit.msg.err = function (msg) {
   store.commit('setSnackbar', data);
 
 }
-kit.env=(env == 'development' ? '/api' : '');
-
+kit.env=(env == 'development' ? '/api' : '/ap');
+kit.envImg=(env == 'development' ? '' : '/ap');
 export default kit

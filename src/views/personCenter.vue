@@ -36,7 +36,7 @@
                                   :counter="100"></v-text-field>
                       <v-text-field v-model="user.statusStr" label="状态"  disabled></v-text-field>
                       <v-avatar size="68px">
-                        <img :src="user.avatar=='undefiend'?imgUrl:user.avatar">
+                        <img :src="user.avatar==undefiend||user.avatar=='undefiend'?imgUrl:user.avatar">
                       </v-avatar>
                       <vue-core-image-upload
                         class=""
@@ -120,7 +120,7 @@ export default {
         return (newPwd===reNewPwd)||'两次输入的密码不一致'
       },
       env:Kit.env,
-      imgUrl: '../../static/none.png',
+      imgUrl: Kit.envImg+'/static/none.png',
       uploadUrl:Kit.env==''?'/cmn/act01':'/api/cmn/act01',
       imgMaxSize:52428
     };
