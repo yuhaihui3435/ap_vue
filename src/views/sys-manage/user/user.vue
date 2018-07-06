@@ -71,7 +71,7 @@
             <v-divider></v-divider>
                   <v-list dense>
                              <v-list-tile>
-                                    <v-list-tile-content>头像:</v-list-tile-content><v-list-tile-content class="align-end"><v-avatar size="38px"><img :src="userView.avatar?userView.avatar:envImg+'/static/none.png'"></v-avatar></v-list-tile-content>
+                                    <v-list-tile-content>头像:</v-list-tile-content><v-list-tile-content class="align-end"><v-avatar size="38px"><img :src="userView.avatar?userView.avatar:'/static/none.png'"></v-avatar></v-list-tile-content>
                               </v-list-tile>
                               <v-list-tile>
                                     <v-list-tile-content>登录账号:</v-list-tile-content><v-list-tile-content class="align-end">{{userView.loginname}}</v-list-tile-content>
@@ -248,7 +248,7 @@ export default {
       loading: false,
       title: "新增用户信息表",
       rules: Kit.inputRules,
-      envImg:Kit.envImg,
+      // envImg:Kit.envImg,
       userHeaders: [
         {
           text: "登录账号",

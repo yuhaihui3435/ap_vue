@@ -120,7 +120,7 @@ export default {
         return (newPwd===reNewPwd)||'两次输入的密码不一致'
       },
       env:Kit.env,
-      imgUrl: Kit.envImg+'/static/none.png',
+      imgUrl: '/static/none.png',
       uploadUrl:Kit.env==''?'/cmn/act01':'/api/cmn/act01',
       imgMaxSize:52428
     };

@@ -154,8 +154,8 @@ export default {
     this.$store.commit('setNickname',localStorage.getItem('nickname'))
     let avatar=localStorage.getItem('avatar');
     if(avatar==undefined||avatar=="undefined"){
-      let env=process.env.NODE_ENV;
-      avatar=(env == 'development' ? '' : '/ap')+"/static/none.png";
+      // let env=process.env.NODE_ENV;
+      avatar="/static/none.png";
     }
     this.$store.commit('setAvatar',avatar)
     //恢复菜单前一次的展开状态
